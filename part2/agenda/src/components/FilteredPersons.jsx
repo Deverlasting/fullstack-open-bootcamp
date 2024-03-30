@@ -1,4 +1,15 @@
-export const FilteredPersons = ({ persons, filterText }) => {
+import personsServices from "../services/personsServices"
+import { useState, useEffect } from "react"
+
+export const FilteredPersons = ({ filterText }) => {
+  const [persons, setPersons] = useState([])
+
+  useEffect(() => {
+    personsServices.getAll().then((response) => {
+      setPersons(response.data)
+    })
+  }, [])
+
   const filteredPersons = persons.filter((person) => person.name.toLowerCase().includes(filterText.toLowerCase()))
   return (
     <div>

@@ -1,38 +1,76 @@
 import { useState } from "react"
 import List from "./components/List"
 import FilteredPersons from "./components/FilteredPersons"
-import Filter from "./components/Filter"
 import { Form } from "./components/Form"
+import personsServices from "./services/personsServices"
+import Filter from "./components/Filter"
+import Notification from "./components/Notification"
 
 const App = () => {
-  const [persons, setPersons] = useState([
-    { name: "Arto Hellas", number: "040-123456", id: 1 },
-    { name: "Ada Lovelace", number: "39-44-5323523", id: 2 },
-    { name: "Dan Abramov", number: "12-43-234345", id: 3 },
-    { name: "Mary Poppendieck", number: "39-23-6423122", id: 4 },
-  ])
   const [newName, setNewName] = useState("") //form input
   const [newNumber, setNewNumber] = useState("")
   const [filterText, setFilterText] = useState("")
+  const [notificationMessage, setNotificationMessage] = useState("")
+  const [typeMessage, setTypeMessage] = useState("")
 
   const handleSubmit = (event) => {
     event.preventDefault()
-
-    let alreadyAdded = false
-    const personAlreadyAdded = persons.map((obj) => {
-      if (obj.name === newName) {
-        alreadyAdded = true
-        return window.alert(`${newName} is already added to the phonebook`)
-      }
-    })
-    if (alreadyAdded) return
 
     const newPerson = {
       name: newName,
       number: newNumber,
     }
 
-    setPersons(persons.concat(newPerson))
+    if (newName === "") return window.alert("Name field is empty")
+    if (newNumber === "") return window.alert("Number field is empty")
+
+    let alreadyAdded = false
+    personsServices
+      .getAll()
+      .then((response) => {
+        const personAlreadyAdded = response.data.map((obj) => {
+          console.log(response.status)
+          if (obj.name === newName) {
+            alreadyAdded = true
+
+            if (window.confirm(`Do you really want to update ${obj.name} number to ${newNumber}?`)) {
+              // throw new Error("Mensaje de error")
+              console.log(response.status)
+              // if (response.status === 404) {
+              //   throw new Error("Error 404")
+              // }
+              setTypeMessage("correct")
+              setNotificationMessage(`${newPerson.name} modified correctly`)
+              personsServices.update(obj.id, newPerson)
+            }
+            console.log(response.status)
+            // if (response.status === 404) {
+            //   throw new Error("Error 404")
+            // }
+            // return
+          }
+        })
+        console.log(response.status)
+
+        if (!alreadyAdded) {
+          setTypeMessage("correct")
+          setNotificationMessage(`${newPerson.name} added correctly`)
+          personsServices.create(newPerson).then(() => {})
+          // personsServices.create(newPerson).then((response) => {})
+        }
+        console.log(response.status)
+      })
+      .catch((error) => {
+        // alert(`the note was already deleted from server`)
+        console.log("error", error)
+        setTypeMessage("error")
+        setNotificationMessage(`Error updating ${newPerson.name} data`)
+      })
+
+    setTimeout(() => {
+      setTypeMessage(null)
+      setNotificationMessage(null)
+    }, 10000)
   }
 
   const handleChangeName = (event) => {
@@ -50,6 +88,7 @@ const App = () => {
   return (
     <div>
       <h1>PhoneBook</h1>
+      <Notification notificationMessage={notificationMessage} typeMessage={typeMessage} />
       <Filter filterText={filterText} handleChangeFilterText={handleChangeFilterText} />
 
       <Form
@@ -60,8 +99,8 @@ const App = () => {
         handleChangeNumber={handleChangeNumber}
       />
 
-      <List persons={persons} />
-      <FilteredPersons persons={persons} filterText={filterText} />
+      <List />
+      <FilteredPersons filterText={filterText} />
     </div>
   )
 }
