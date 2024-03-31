@@ -11,9 +11,9 @@ const App = () => {
   const [newNumber, setNewNumber] = useState("")
   const [filterText, setFilterText] = useState("")
   const [notificationMessage, setNotificationMessage] = useState("")
-  const [typeMessage, setTypeMessage] = useState("")
+  const [typeMessage, setTypeMessage] = useState()
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault()
 
     const newPerson = {
@@ -24,48 +24,31 @@ const App = () => {
     if (newName === "") return window.alert("Name field is empty")
     if (newNumber === "") return window.alert("Number field is empty")
 
-    let alreadyAdded = false
-    personsServices
-      .getAll()
-      .then((response) => {
-        const personAlreadyAdded = response.data.map((obj) => {
-          console.log(response.status)
-          if (obj.name === newName) {
-            alreadyAdded = true
+    try {
+      const response = await personsServices.getAll()
 
-            if (window.confirm(`Do you really want to update ${obj.name} number to ${newNumber}?`)) {
-              // throw new Error("Mensaje de error")
-              console.log(response.status)
-              // if (response.status === 404) {
-              //   throw new Error("Error 404")
-              // }
-              setTypeMessage("correct")
-              setNotificationMessage(`${newPerson.name} modified correctly`)
-              personsServices.update(obj.id, newPerson)
-            }
-            console.log(response.status)
-            // if (response.status === 404) {
-            //   throw new Error("Error 404")
-            // }
-            // return
+      let alreadyAdded = false
+      for (const obj of response.data) {
+        if (obj.name === newName) {
+          alreadyAdded = true
+          if (window.confirm(`Do you really want to update ${obj.name} number to ${newNumber}?`)) {
+            setTypeMessage("correct")
+            setNotificationMessage(`${newPerson.name} modified correctly`)
+            await personsServices.update(obj.id, newPerson)
           }
-        })
-        console.log(response.status)
-
-        if (!alreadyAdded) {
-          setTypeMessage("correct")
-          setNotificationMessage(`${newPerson.name} added correctly`)
-          personsServices.create(newPerson).then(() => {})
-          // personsServices.create(newPerson).then((response) => {})
+          break
         }
-        console.log(response.status)
-      })
-      .catch((error) => {
-        // alert(`the note was already deleted from server`)
-        console.log("error", error)
-        setTypeMessage("error")
-        setNotificationMessage(`Error updating ${newPerson.name} data`)
-      })
+      }
+
+      if (!alreadyAdded) {
+        setTypeMessage("correct")
+        setNotificationMessage(`${newPerson.name} added correctly`)
+        await personsServices.create(newPerson)
+      }
+    } catch (error) {
+      setTypeMessage("error")
+      setNotificationMessage(`Error updating ${newPerson.name} data`)
+    }
 
     setTimeout(() => {
       setTypeMessage(null)
@@ -89,6 +72,7 @@ const App = () => {
     <div>
       <h1>PhoneBook</h1>
       <Notification notificationMessage={notificationMessage} typeMessage={typeMessage} />
+
       <Filter filterText={filterText} handleChangeFilterText={handleChangeFilterText} />
 
       <Form
