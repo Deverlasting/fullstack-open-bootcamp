@@ -4,11 +4,9 @@ import personsServices from "../services/personsServices"
 export const List = () => {
   const [persons, setPersons] = useState([])
 
-  useEffect(() => {
-    personsServices.getAll().then((response) => {
-      setPersons(response.data)
-    })
-  }, [persons])
+  personsServices.getAll().then((response) => {
+    setPersons(response.data)
+  })
 
   const handleClick = (event) => {
     const id = event.target.id
