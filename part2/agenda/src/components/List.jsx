@@ -4,15 +4,22 @@ import personsServices from "../services/personsServices"
 export const List = () => {
   const [persons, setPersons] = useState([])
 
-  personsServices.getAll().then((response) => {
-    setPersons(response.data)
-  })
+  useEffect(() => {
+    personsServices.getAll().then((response) => {
+      setPersons(response.data)
+    })
+  }, [])
 
   const handleClick = (event) => {
     const id = event.target.id
 
     if (window.confirm(`Do you really want to delete ${event.target.name}?`)) {
-      personsServices.deletePerson(id)
+      personsServices.deletePerson(id).then(() => {
+        //used to reload the web automatically
+        personsServices.getAll().then((response) => {
+          setPersons(response.data)
+        })
+      })
     }
   }
 

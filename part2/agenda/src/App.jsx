@@ -1,4 +1,4 @@
-// import { useState } from "react"
+// import { useState, } from "react"
 // import List from "./components/List"
 // import FilteredPersons from "./components/FilteredPersons"
 // import { Form } from "./components/Form"
@@ -107,7 +107,7 @@
 
 // export default App
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import List from "./components/List"
 import FilteredPersons from "./components/FilteredPersons"
 import { Form } from "./components/Form"
@@ -121,6 +121,7 @@ const App = () => {
   const [filterText, setFilterText] = useState("")
   const [notificationMessage, setNotificationMessage] = useState("")
   const [typeMessage, setTypeMessage] = useState()
+  const [persons, setPersons] = useState([])
 
   const handleSubmit = async (event) => {
     event.preventDefault()
@@ -155,6 +156,7 @@ const App = () => {
         await personsServices.create(newPerson)
       }
     } catch (error) {
+      console.log("catch", error)
       setTypeMessage("error")
       setNotificationMessage(`Error updating ${newPerson.name} data`)
     }
