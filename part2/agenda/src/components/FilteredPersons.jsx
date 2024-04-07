@@ -4,9 +4,15 @@ import { useState, useEffect } from "react"
 export const FilteredPersons = ({ filterText }) => {
   const [persons, setPersons] = useState([])
 
+  // useEffect(() => {
+  //   personsServices.getAll().then((response) => {
+  //     setPersons(response.data)
+  //   })
+  // }, [])
+
   useEffect(() => {
-    personsServices.getAll().then((response) => {
-      setPersons(response.data)
+    personsServices.getAll().then((initialPerson) => {
+      setPersons(initialPerson)
     })
   }, [])
 

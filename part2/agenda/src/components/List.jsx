@@ -1,28 +1,4 @@
-import { useState, useEffect } from "react"
-import personsServices from "../services/personsServices"
-
-export const List = () => {
-  const [persons, setPersons] = useState([])
-
-  useEffect(() => {
-    personsServices.getAll().then((response) => {
-      setPersons(response.data)
-    })
-  }, [])
-
-  const handleClick = (event) => {
-    const id = event.target.id
-
-    if (window.confirm(`Do you really want to delete ${event.target.name}?`)) {
-      personsServices.deletePerson(id).then(() => {
-        //used to reload the web automatically
-        personsServices.getAll().then((response) => {
-          setPersons(response.data)
-        })
-      })
-    }
-  }
-
+export const List = ({ persons, handleClick }) => {
   return (
     <div>
       <h2>Numbers</h2>

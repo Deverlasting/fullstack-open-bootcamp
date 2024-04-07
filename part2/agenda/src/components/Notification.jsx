@@ -1,9 +1,12 @@
 import "../index.css"
 
 export const Notification = ({ notificationMessage, typeMessage }) => {
+  // console.log(typeMessage)
   if (notificationMessage === null) {
     return null
   }
+
+  //TODO conditional render
   if (typeMessage === "correct") {
     return (
       <div>
