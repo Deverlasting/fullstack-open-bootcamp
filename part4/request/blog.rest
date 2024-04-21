@@ -1,0 +1,42 @@
+GET http://localhost:3003/api/blogs/
+
+###
+POST http://localhost:3003/api/blogs/ HTTP/1.1
+content-type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IlBlcHBlcm9uaTgzIiwiaWQiOiI2NjI0ZTgyYThkMWM2NzFjZDQ3MzZhMTYiLCJpYXQiOjE3MTM2OTYzMTd9.xxch4iev_kDe4T1_9txVxHO4Pb01uH6i0iyphcu1QDc
+
+{
+    "title": "Pizzamazing",
+    "author": "Johnny Pepperoni",
+    "url": "pizza.com",
+    "likes": 7,
+    "userId": "6624e82a8d1c671cd4736a16"
+}
+###
+POST http://localhost:3003/api/blogs/ HTTP/1.1
+content-type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImNhbnRhcmluYTkzIiwiaWQiOiI2NjI0ZjM1ZjMwNjIyZGRkZDdkYWZmNzEiLCJpYXQiOjE3MTM2OTc2NzV9.56gQLY9TNP1pbia8vbZJuVHEck2PAKxltxu15iLZ85w
+
+{
+    "title": "Sandwich mixto2",
+    "author": "Angela",
+    "url": "trancheteando.com",
+    "likes": 4
+}
+###
+
+DELETE http://localhost:3003/api/blogs/66253e6ef6a6877f2b9780ac HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImNhbnRhcmluYTkzIiwiaWQiOiI2NjI0ZjM1ZjMwNjIyZGRkZDdkYWZmNzEiLCJpYXQiOjE3MTM2OTc2NzV9.56gQLY9TNP1pbia8vbZJuVHEck2PAKxltxu15iLZ85w
+
+###
+
+PUT http://localhost:3003/api/blogs/5a422aa71b54a676234d17f6 HTTP/1.1
+Content-Type: application/json
+
+{
+
+    "title": "Sandwich MUY mixto",
+    "author": "Angela",
+    "url": "trancheteando.com",
+    "likes": 4
+}
