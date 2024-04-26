@@ -9,8 +9,9 @@ const getAll = () => {
 }
 
 const getCountry = () => {
-    // return axios.get(`${baseUrl}all`)
+    // return axios.get(`${baseUrl}name/`)
     return axios.get(`https://studies.cs.helsinki.fi/restcountries/api/name/finland`)
+
 }
 
 

@@ -4,20 +4,20 @@ import AllCountries from "./components/AllCountries"
 import Country from "./components/Country"
 
 function App() {
-  const [country, setCountry] = useState()
+  const [filteredTextCountry, setFilteredTextCountry] = useState("")
 
-  const handleChange = (event) => {
-    setCountry(event.target.value)
+  const handleFilterCountry = (event) => {
+    setFilteredTextCountry(event.target.value)
   }
 
   return (
     <>
       Find countries
-      <input onChange={handleChange}></input>
-      {country}
+      <input onChange={handleFilterCountry}></input>
+      {filteredTextCountry}
       <br />
       {/* <AllCountries /> */}
-      <Country />
+      <Country filteredTextCountry={filteredTextCountry} handleFilterCountry={handleFilterCountry} />
     </>
   )
 }
