@@ -3,6 +3,8 @@ import Blog from "./components/Blog"
 import blogService from "./services/blogs"
 import loginService from "./services/login"
 import Notification from "./components/Notification"
+import LoginForm from "./components/LoginForm"
+import CreateBlogForm from "./components/CreateBlogForm"
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
@@ -73,7 +75,6 @@ const App = () => {
 
     blogService.create(noteObject).then((returnedBlog) => {
       setBlogs(blogs.concat(returnedBlog))
-      // setNewNote("")
     })
 
     setTypeMessage("correct")
@@ -84,59 +85,57 @@ const App = () => {
     }, 5000)
   }
 
+  const sortByLikes = (a, b) => {
+    return b.likes - a.likes // Orden descendente
+  }
+
   //RENDER
   if (user === null) {
     return (
       <div>
         <Notification notificationMessage={notificationMessage} typeMessage={typeMessage} />
-        <h2>Log in to application</h2>
+        <LoginForm
+          handleLogin={handleLogin}
+          username={username}
+          handleUsernameChange={({ target }) => setUsername(target.value)}
+          password={password}
+          handelPasswordChange={({ target }) => setPassword(target.value)}
+        />
+      </div>
+    )
+  } else {
+    return (
+      <div>
+        <Notification notificationMessage={notificationMessage} typeMessage={typeMessage} />
+        {/* <div>
+          <h2>blogs</h2>
+          <h3>{loggedUser.name}</h3>
+          {blogs.map((blog) => (
+            <Blog key={blog.id} blog={blog} />
+          ))}
+        </div> */}
+        <div>
+          <h2>blogs</h2>
+          <h3>{loggedUser.name}</h3>
 
-        <form onSubmit={handleLogin}>
-          <div>
-            username
-            <input type="text" value={username} name="Username" onChange={({ target }) => setUsername(target.value)} />
-          </div>
-          <div>
-            password
-            <input type="password" value={password} name="Password" onChange={({ target }) => setPassword(target.value)} />
-          </div>
-          <button type="submit">login</button>
-        </form>
+          {blogs.sort(sortByLikes).map((blog) => (
+            <Blog key={blog.id} blog={blog} />
+          ))}
+        </div>
+
+        <CreateBlogForm
+          handleSubmit={handleSubmit}
+          title={title}
+          handleTitleChange={({ target }) => setTitle(target.value)}
+          author={author}
+          handleAuthorChange={({ target }) => setAuthor(target.value)}
+          url={url}
+          handleUrlChange={({ target }) => setUrl(target.value)}
+        />
+        <button onClick={handleLogOut}>Log out</button>
       </div>
     )
   }
-
-  return (
-    <div>
-      <Notification notificationMessage={notificationMessage} typeMessage={typeMessage} />
-      <div>
-        <h2>blogs</h2>
-        <h3>{loggedUser.name}</h3>
-        {blogs.map((blog) => (
-          <Blog key={blog.id} blog={blog} />
-        ))}
-      </div>
-      <div>
-        <h2>Create new</h2>
-        <form onSubmit={handleSubmit}>
-          <div>
-            Title
-            <input type="text" value={title} name="title" onChange={({ target }) => setTitle(target.value)} />
-          </div>
-          <div>
-            Author
-            <input type="text" value={author} name="author" onChange={({ target }) => setAuthor(target.value)} />
-          </div>
-          <div>
-            Url
-            <input type="text" value={url} name="url" onChange={({ target }) => setUrl(target.value)} />
-          </div>
-          <button type="submit">add</button>
-        </form>
-      </div>
-      <button onClick={handleLogOut}>Log out</button>
-    </div>
-  )
 }
 
 export default App
