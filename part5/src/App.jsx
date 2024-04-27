@@ -89,6 +89,10 @@ const App = () => {
     return b.likes - a.likes // Orden descendente
   }
 
+  const handleLike = () => {
+    blogService.getAll().then((blogs) => setBlogs(blogs))
+  }
+
   //RENDER
   if (user === null) {
     return (
@@ -119,7 +123,7 @@ const App = () => {
           <h3>{loggedUser.name}</h3>
 
           {blogs.sort(sortByLikes).map((blog) => (
-            <Blog key={blog.id} blog={blog} />
+            <Blog onLike={handleLike} key={blog.id} blog={blog} />
           ))}
         </div>
 

@@ -1,7 +1,7 @@
 import React, { useState } from "react"
 import blogs from "../services/blogs"
 
-const Blog = ({ blog }) => {
+const Blog = ({ blog, onLike }) => {
   const [showDetails, setShowDetails] = useState(false)
 
   const blogStyle = {
@@ -16,20 +16,21 @@ const Blog = ({ blog }) => {
     setShowDetails(!showDetails)
   }
 
-  const handleLike = () => {
+  const handleLike = async () => {
     const updatedBlog = {
       // ...blog,
       likes: blog.likes + 1,
     }
 
-    blogs.update(blog.id, updatedBlog)
+    await blogs.update(blog.id, updatedBlog)
 
-    window.location.reload()
+    // window.location.reload()
+    onLike()
   }
 
   const handleRemove = () => {
     blogs.remove(blog.id)
-    window.location.reload()
+    // window.location.reload()
   }
 
   return (
