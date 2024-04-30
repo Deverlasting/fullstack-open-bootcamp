@@ -15,25 +15,22 @@ export const CreateBlogForm = ({
   const showWhenVisible = { display: createBlogVisible ? "" : "none" }
 
   return (
-    <div>
+    <div className="blog">
       <button style={hideWhenVisible} onClick={() => setCreateBlogVisible(true)}>
         New blog
       </button>
       <div style={showWhenVisible}>
         <h2>Create new</h2>
         <form onSubmit={handleSubmit}>
-          <div>
-            Title
-            <input type="text" value={title} name="title" onChange={handleTitleChange} />
-          </div>
-          <div>
-            Author
-            <input type="text" value={author} name="author" onChange={handleAuthorChange} />
-          </div>
-          <div>
-            Url
-            <input type="text" value={url} name="url" onChange={handleUrlChange} />
-          </div>
+          Title
+          <input placeholder="title" type="text" value={title} name="title" onChange={handleTitleChange} />
+          <br />
+          Author
+          <input placeholder="author" type="text" value={author} name="author" onChange={handleAuthorChange} />
+          <br />
+          Url
+          <input placeholder="url" type="text" value={url} name="url" onChange={handleUrlChange} />
+          <br />
           <button onClick={() => setCreateBlogVisible(false)} type="submit">
             Create new blog
           </button>

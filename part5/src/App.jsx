@@ -67,13 +67,13 @@ const App = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault()
-    const noteObject = {
+    const blogObject = {
       title: title,
       author: author,
       url: url,
     }
 
-    blogService.create(noteObject).then((returnedBlog) => {
+    blogService.create(blogObject).then((returnedBlog) => {
       setBlogs(blogs.concat(returnedBlog))
     })
 
@@ -89,7 +89,19 @@ const App = () => {
     return b.likes - a.likes // Orden descendente
   }
 
-  const handleLike = () => {
+  const handleLike = async (blog) => {
+    const updatedBlog = {
+      // ...blog,
+      likes: blog.likes + 1,
+    }
+
+    await blogService.update(blog.id, updatedBlog)
+    // setBlogs(blogs.map((b) => (b.id === updatedBlog.id ? updatedBlogs : b)))
+
+    blogService.getAll().then((blogs) => setBlogs(blogs))
+  }
+
+  const handleRemove = () => {
     blogService.getAll().then((blogs) => setBlogs(blogs))
   }
 
@@ -103,7 +115,7 @@ const App = () => {
           username={username}
           handleUsernameChange={({ target }) => setUsername(target.value)}
           password={password}
-          handelPasswordChange={({ target }) => setPassword(target.value)}
+          handlePasswordChange={({ target }) => setPassword(target.value)}
         />
       </div>
     )
@@ -111,19 +123,12 @@ const App = () => {
     return (
       <div>
         <Notification notificationMessage={notificationMessage} typeMessage={typeMessage} />
-        {/* <div>
-          <h2>blogs</h2>
-          <h3>{loggedUser.name}</h3>
-          {blogs.map((blog) => (
-            <Blog key={blog.id} blog={blog} />
-          ))}
-        </div> */}
         <div>
           <h2>blogs</h2>
           <h3>{loggedUser.name}</h3>
 
           {blogs.sort(sortByLikes).map((blog) => (
-            <Blog onLike={handleLike} key={blog.id} blog={blog} />
+            <Blog user={user} handleLike={handleLike} onRemove={handleRemove} key={blog.id} blog={blog} />
           ))}
         </div>
 

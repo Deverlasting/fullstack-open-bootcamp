@@ -14,22 +14,22 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IlBlc
 ###
 POST http://localhost:3003/api/blogs/ HTTP/1.1
 content-type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImNhbnRhcmluYTkzIiwiaWQiOiI2NjI2NDhkMmVhYzBlYzdhNWRiNTNkZjgiLCJpYXQiOjE3MTM3ODUwNDgsImV4cCI6MTcxNDM4OTg0OH0.3v_gOrJJ_XjdBoIkVrbgK65wIfzyKJqV43uYEwYrklo
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImNhbnRhcmluYTkzIiwiaWQiOiI2NjI2OGE5Nzg4ZTllNGU4ZDZmYzdlYWYiLCJpYXQiOjE3MTQyOTUxMDN9.yRFMDztT67ma-cf6yilda2IoGwQPUp4v3ux1anb7mgg
 
 {
-    "title": "Sandwich mixto2",
+    "title": "Sandwich mixto",
     "author": "Angela",
     "url": "trancheteando.com",
     "likes": 4
 }
 ###
 
-DELETE http://localhost:3003/api/blogs/66263e8518f79cdbb9c9ab06 HTTP/1.1
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImNhbnRhcmluYTkzIiwiaWQiOiI2NjI2M2U0YzE4Zjc5Y2RiYjljOWFiMDEiLCJpYXQiOjE3MTM3ODIzNzZ9.Ttz4uDb54yjfj2Ey023-mz5s3ZXDFPJz1jbAtNfJgtY
+DELETE http://localhost:3003/api/blogs/66292aa0696a9b5ed336b37f HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImNhbnRhcmluYTkzIiwiaWQiOiI2NjI2OGE5Nzg4ZTllNGU4ZDZmYzdlYWYiLCJpYXQiOjE3MTQyOTUxMDN9.yRFMDztT67ma-cf6yilda2IoGwQPUp4v3ux1anb7mgg
 
 ###
 
-PUT http://localhost:3003/api/blogs/5a422aa71b54a676234d17f6 HTTP/1.1
+PUT http://localhost:3003/api/blogs/66292a9a696a9b5ed336b379 HTTP/1.1
 Content-Type: application/json
 
 {

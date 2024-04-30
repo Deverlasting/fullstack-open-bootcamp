@@ -1,7 +1,7 @@
 import React, { useState } from "react"
-import blogs from "../services/blogs"
+// import blogs from "../services/blogs"
 
-const Blog = ({ blog, onLike }) => {
+const Blog = ({ blog, handleLike, onRemove, user }) => {
   const [showDetails, setShowDetails] = useState(false)
 
   const blogStyle = {
@@ -16,42 +16,38 @@ const Blog = ({ blog, onLike }) => {
     setShowDetails(!showDetails)
   }
 
-  const handleLike = async () => {
-    const updatedBlog = {
-      // ...blog,
-      likes: blog.likes + 1,
+  const handleRemove = async () => {
+    if (window.confirm(`Remove ${blog.title}?`)) {
+      await blogs.remove(blog.id)
+      onRemove()
     }
-
-    await blogs.update(blog.id, updatedBlog)
-
-    // window.location.reload()
-    onLike()
-  }
-
-  const handleRemove = () => {
-    blogs.remove(blog.id)
-    // window.location.reload()
   }
 
   return (
-    <div style={blogStyle}>
+    <div className="blog" style={blogStyle}>
       <div>
         {blog.title} {blog.author}
-        <button onClick={toggleDetails}>View</button>
+        <button className="viewButton" onClick={toggleDetails}>
+          View
+        </button>
       </div>
-
       {showDetails && (
         <div>
           {blog.url}
           <br />
           {blog.likes}
-          <button onClick={handleLike}>Like</button>
+          <button onClick={() => handleLike(blog)}>Like</button>
           <br />
           {blog.user.name}
           <br />
-          <button onClick={handleRemove} style={{ backgroundColor: "#f25073" }}>
+          {user.username === blog.user.username ? (
+            <button onClick={handleRemove} style={{ backgroundColor: "#f25073" }}>
+              Remove{" "}
+            </button>
+          ) : null}
+          {/* <button onClick={handleRemove} style={{ backgroundColor: "#f25073" }}>
             Remove
-          </button>
+          </button> */}
         </div>
       )}
     </div>
