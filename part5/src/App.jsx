@@ -66,15 +66,13 @@ const App = () => {
   const loggedUser = JSON.parse(loggedUserJSON)
 
   const handleSubmit = (event) => {
-    event.preventDefault()
     const blogObject = {
       title: title,
       author: author,
       url: url,
     }
-
     blogService.create(blogObject).then((returnedBlog) => {
-      setBlogs(blogs.concat(returnedBlog))
+      setBlogs((blogs) => [...blogs, { ...returnedBlog, user: loggedUser }])
     })
 
     setTypeMessage("correct")
@@ -101,8 +99,13 @@ const App = () => {
     blogService.getAll().then((blogs) => setBlogs(blogs))
   }
 
-  const handleRemove = () => {
-    blogService.getAll().then((blogs) => setBlogs(blogs))
+  const handleRemove = async (blog) => {
+    if (window.confirm(`Remove ${blog.title}?`)) {
+      await blogService.remove(blog.id)
+
+      blogService.getAll().then((blogs) => setBlogs(blogs))
+      // onRemove()
+    }
   }
 
   //RENDER
@@ -128,14 +131,14 @@ const App = () => {
           <h3>{loggedUser.name}</h3>
 
           {blogs.sort(sortByLikes).map((blog) => (
-            <Blog user={user} handleLike={handleLike} onRemove={handleRemove} key={blog.id} blog={blog} />
+            <Blog user={user} handleLike={handleLike} handleRemove={handleRemove} key={blog.id} blog={blog} />
           ))}
         </div>
 
         <CreateBlogForm
-          handleSubmit={handleSubmit}
+          onSubmit={handleSubmit}
           title={title}
-          handleTitleChange={({ target }) => setTitle(target.value)}
+          handleTitleChange={(value) => setTitle(value)} //este es que funciona
           author={author}
           handleAuthorChange={({ target }) => setAuthor(target.value)}
           url={url}

@@ -1,7 +1,8 @@
 import React, { useState } from "react"
 // import blogs from "../services/blogs"
+import blogService from "../services/blogs"
 
-const Blog = ({ blog, handleLike, onRemove, user }) => {
+const Blog = ({ blog, handleLike, handleRemove, user }) => {
   const [showDetails, setShowDetails] = useState(false)
 
   const blogStyle = {
@@ -14,15 +15,9 @@ const Blog = ({ blog, handleLike, onRemove, user }) => {
 
   const toggleDetails = () => {
     setShowDetails(!showDetails)
+    //hacer que aparezca el botón de remove cuando se renderiza la primera vez(?)
   }
-
-  const handleRemove = async () => {
-    if (window.confirm(`Remove ${blog.title}?`)) {
-      await blogs.remove(blog.id)
-      onRemove()
-    }
-  }
-
+  console.log(blog.user)
   return (
     <div className="blog" style={blogStyle}>
       <div>
@@ -38,16 +33,14 @@ const Blog = ({ blog, handleLike, onRemove, user }) => {
           {blog.likes}
           <button onClick={() => handleLike(blog)}>Like</button>
           <br />
+          {/* {JSON.stringify.blog.user} */}
           {blog.user.name}
           <br />
           {user.username === blog.user.username ? (
-            <button onClick={handleRemove} style={{ backgroundColor: "#f25073" }}>
+            <button onClick={() => handleRemove(blog)} style={{ backgroundColor: "#f25073" }}>
               Remove{" "}
             </button>
           ) : null}
-          {/* <button onClick={handleRemove} style={{ backgroundColor: "#f25073" }}>
-            Remove
-          </button> */}
         </div>
       )}
     </div>

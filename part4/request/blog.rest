@@ -3,7 +3,7 @@ GET http://localhost:3003/api/blogs/
 ###
 POST http://localhost:3003/api/blogs/ HTTP/1.1
 content-type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IlBlcHBlcm9uaTgzIiwiaWQiOiI2NjI2NDg4M2VhYzBlYzdhNWRiNTNkZjEiLCJpYXQiOjE3MTM3ODQ5ODEsImV4cCI6MTcxNDM4OTc4MX0.oOK6Uu2Aw1C6oHeSVuZMYJyvLfRq6nZVgk37me-4N8s
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IlBlcHBlcm9uaTgzIiwiaWQiOiI2NjM1MmNjMzY1YjczNzdkMTg0YTc0N2UiLCJpYXQiOjE3MTQ3NjA5MDZ9.f_RH7aSHpopqAEs9Q7KMpWlFpaTIb05SDrj6aH9g7Zw
 
 {
     "title": "Pizzamazing",
@@ -14,7 +14,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IlBlc
 ###
 POST http://localhost:3003/api/blogs/ HTTP/1.1
 content-type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImNhbnRhcmluYTkzIiwiaWQiOiI2NjI2OGE5Nzg4ZTllNGU4ZDZmYzdlYWYiLCJpYXQiOjE3MTQyOTUxMDN9.yRFMDztT67ma-cf6yilda2IoGwQPUp4v3ux1anb7mgg
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImNhbnRhcmluYTkzIiwiaWQiOiI2NjMzYzc0Yzg5N2UyMWYzNWVkNTBlNTUiLCJpYXQiOjE3MTQ3NjEwNDd9.24UqDx5oDoa6twO88QcEFYfG4d4W4SdqFZpNqQkyBa0
 
 {
     "title": "Sandwich mixto",
@@ -25,8 +25,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImNhb
 ###
 
 DELETE http://localhost:3003/api/blogs/66292aa0696a9b5ed336b37f HTTP/1.1
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImNhbnRhcmluYTkzIiwiaWQiOiI2NjI2OGE5Nzg4ZTllNGU4ZDZmYzdlYWYiLCJpYXQiOjE3MTQyOTUxMDN9.yRFMDztT67ma-cf6yilda2IoGwQPUp4v3ux1anb7mgg
-
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImNhbnRhcmluYTkzIiwiaWQiOiI2NjMzYzc0Yzg5N2UyMWYzNWVkNTBlNTUiLCJpYXQiOjE3MTQ3NjEwNDd9.24UqDx5oDoa6twO88QcEFYfG4d4W4SdqFZpNqQkyBa0
 ###
 
 PUT http://localhost:3003/api/blogs/66292a9a696a9b5ed336b379 HTTP/1.1

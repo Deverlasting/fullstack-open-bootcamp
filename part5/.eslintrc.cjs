@@ -1,11 +1,13 @@
 module.exports = {
   "env": {
     "browser": true,
-    "es2021": true
+    "es2021": true,
+    "vitest-globals/env": true
   },
   "extends": [
     "standard-with-typescript",
-    "plugin:react/recommended"
+    "plugin:react/recommended",
+    'plugin:vitest-globals/recommended',
   ],
   "overrides": [
     {

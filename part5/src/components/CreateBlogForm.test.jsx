@@ -1,68 +1,42 @@
-// import { render, screen } from "@testing-library/react"
-// import userEvent from "@testing-library/user-event"
-// import CreateBlogForm from "./CreateBlogForm"
-
-// test("CreateBlogForm calls handleSubmit with correct details", async () => {
-//   const mockHandleSubmit = vi.fn()
-//   render(<CreateBlogForm handleSubmit={mockHandleSubmit} />)
-//   //   const { container } = render(<CreateBlogForm handleSubmit={mockHandleSubmit} />)
-//   //   const div = container.querySelector(".blog")
-
-//   const user = userEvent.setup()
-//   //   const newBlogButton = screen.getByLabelText("New blog")
-//   const newBlogButton = screen.getByRole("button", { name: "New blog" })
-//   await user.click(newBlogButton)
-
-//   // const titleInput = screen.getByRole("textbox", { name: "title" })
-//   const titleInput = screen.getByPlaceholderText("title")
-//   const authorInput = screen.getByPlaceholderText("author")
-//   const urlInput = screen.getByPlaceholderText("url")
-//   const createBlogButton = screen.getByRole("button", { name: "Create new blog" })
-
-//   await user.type(titleInput, "Test Title")
-//   await user.type(authorInput, "Test Author")
-//   await user.type(urlInput, "https://example.com")
-
-//   await user.click(createBlogButton)
-
-//   expect(mockHandleSubmit).toHaveBeenCalledWith({
-//     title: "Test Title",
-//     author: "Test Author",
-//     url: "https://example.com",
-//   })
-// })
-
 import React from "react"
-import { render, screen } from "@testing-library/react"
-import userEvent from "@testing-library/user-event"
+import { fireEvent, render, screen } from "@testing-library/react"
 import CreateBlogForm from "./CreateBlogForm"
+import userEvent from "@testing-library/user-event"
+import { test, vi } from "vitest"
 
 describe("CreateBlogForm", () => {
-  test("calls handleSubmit with correct details", async () => {
+  test.only("calls handleSubmit with correct details", async () => {
     const mockHandleSubmit = vi.fn()
-    render(<CreateBlogForm handleSubmit={mockHandleSubmit} />)
-
-    const user = userEvent.setup()
+    const mockHandleTitleChange = vi.fn()
+    render(<CreateBlogForm onSubmit={mockHandleSubmit} handleTitleChange={mockHandleTitleChange} />)
     const newBlogButton = screen.getByRole("button", { name: "New blog" })
-    await user.click(newBlogButton)
-
+    await userEvent.click(newBlogButton)
     const titleInput = screen.getByPlaceholderText("title")
     const authorInput = screen.getByPlaceholderText("author")
     const urlInput = screen.getByPlaceholderText("url")
+    // se escriben los valores en lo inputs
+    await userEvent.type(titleInput, "Test Title")
+    await userEvent.type(authorInput, "Test Author")
+    await userEvent.type(urlInput, "web")
     const createBlogButton = screen.getByRole("button", { name: "Create new blog" })
+    await userEvent.click(createBlogButton) //se envía el formulario
 
-    await user.type(titleInput, "Test Title")
-    await user.type(authorInput, "Test Author")
-    await user.type(urlInput, "https://example.com")
-    await user.click(createBlogButton)
+    console.log("log", mockHandleSubmit.mock.calls)
+    const titleValue = titleInput.value
+    const authorValue = authorInput.value
+    const urlValue = urlInput.value
+    console.log("Title value:", titleValue)
+    console.log("Author value:", authorValue)
+    console.log("Url value:", urlValue)
+    expect(mockHandleSubmit).toHaveBeenCalledTimes(1) //se llama a la función
 
-    expect(mockHandleSubmit.mock.calls).toHaveLength(1) //se llama a la función
+    expect(mockHandleTitleChange).toHaveBeenCalledWith("Test Title")
 
-    expect(mockHandleSubmit.mock.calls[0][0].title).toBe("title")
+    // expect(mockHandleSubmit.mock.calls[0][0].content).toBe("Test Title")
     // expect(mockHandleSubmit).toHaveBeenCalledWith({
     //   title: "Test Title",
     //   author: "Test Author",
-    //   url: "https://example.com",
+    //   url: "web",
     // })
   })
 })

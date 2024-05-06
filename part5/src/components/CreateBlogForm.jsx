@@ -1,18 +1,16 @@
 import { useState } from "react"
 
-export const CreateBlogForm = ({
-  handleSubmit,
-  title,
-  handleTitleChange,
-  author,
-  handleAuthorChange,
-  url,
-  handleUrlChange,
-}) => {
+export const CreateBlogForm = ({ onSubmit, title, handleTitleChange, author, handleAuthorChange, url, handleUrlChange }) => {
   const [createBlogVisible, setCreateBlogVisible] = useState(false)
 
   const hideWhenVisible = { display: createBlogVisible ? "none" : "" }
   const showWhenVisible = { display: createBlogVisible ? "" : "none" }
+
+  const handleSubmit = (event) => {
+    event.preventDefault()
+    console.log("AAAAAAAAAAAAA", event.target[0])
+    onSubmit(event)
+  }
 
   return (
     <div className="blog">
@@ -23,7 +21,13 @@ export const CreateBlogForm = ({
         <h2>Create new</h2>
         <form onSubmit={handleSubmit}>
           Title
-          <input placeholder="title" type="text" value={title} name="title" onChange={handleTitleChange} />
+          <input
+            placeholder="title"
+            type="text"
+            value={title}
+            name="title"
+            onChange={(event) => handleTitleChange(event.target.value)}
+          />
           <br />
           Author
           <input placeholder="author" type="text" value={author} name="author" onChange={handleAuthorChange} />
