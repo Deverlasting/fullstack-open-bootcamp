@@ -11,9 +11,9 @@ const App = () => {
   const [username, setUsername] = useState("")
   const [password, setPassword] = useState("")
   const [user, setUser] = useState(null)
-  const [title, setTitle] = useState("")
-  const [author, setAuthor] = useState("")
-  const [url, setUrl] = useState("")
+  // const [title, setTitle] = useState("")
+  // const [author, setAuthor] = useState("")
+  // const [url, setUrl] = useState("")
 
   const [notificationMessage, setNotificationMessage] = useState("")
   const [typeMessage, setTypeMessage] = useState()
@@ -65,16 +65,25 @@ const App = () => {
   // Convertir el valor JSON a un objeto JavaScript
   const loggedUser = JSON.parse(loggedUserJSON)
 
-  const handleSubmit = (event) => {
-    const blogObject = {
-      title: title,
-      author: author,
-      url: url,
-    }
-    blogService.create(blogObject).then((returnedBlog) => {
-      setBlogs((blogs) => [...blogs, { ...returnedBlog, user: loggedUser }])
-    })
+  // const handleSubmit = (event) => {
+  //   const blogObject = {
+  //     title: title,
+  //     author: author,
+  //     url: url,
+  //   }
+  //   blogService.create(blogObject).then((returnedBlog) => {
+  //     setBlogs((blogs) => [...blogs, { ...returnedBlog, user: loggedUser }])
+  //   })
 
+  //   setTypeMessage("correct")
+  //   setNotificationMessage(`blog added correctly`)
+  //   setTimeout(() => {
+  //     setTypeMessage(null)
+  //     setNotificationMessage(null)
+  //   }, 5000)
+  // }
+
+  const correctNotification = () => {
     setTypeMessage("correct")
     setNotificationMessage(`blog added correctly`)
     setTimeout(() => {
@@ -136,13 +145,14 @@ const App = () => {
         </div>
 
         <CreateBlogForm
-          onSubmit={handleSubmit}
-          title={title}
-          handleTitleChange={(value) => setTitle(value)} //este es que funciona
-          author={author}
-          handleAuthorChange={({ target }) => setAuthor(target.value)}
-          url={url}
-          handleUrlChange={({ target }) => setUrl(target.value)}
+          // onSubmit={handleSubmit}
+          correctNotification={correctNotification}
+          // title={title}
+          // handleTitleChange={(value) => setTitle(value)} //este es que funciona
+          // author={author}
+          // handleAuthorChange={({ target }) => setAuthor(target.value)}
+          // url={url}
+          // handleUrlChange={({ target }) => setUrl(target.value)}
         />
         <button onClick={handleLogOut}>Log out</button>
       </div>
