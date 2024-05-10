@@ -7,11 +7,11 @@ export const LoginForm = ({ handleLogin, username, handleUsernameChange, passwor
       <form onSubmit={handleLogin}>
         <div>
           username
-          <input type="text" value={username} name="Username" onChange={handleUsernameChange} />
+          <input data-testid="username" type="text" value={username} name="Username" onChange={handleUsernameChange} />
         </div>
         <div>
           password
-          <input type="password" value={password} name="Password" onChange={handlePasswordChange} />
+          <input data-testid="password" type="password" value={password} name="Password" onChange={handlePasswordChange} />
         </div>
         <button type="submit">login</button>
       </form>

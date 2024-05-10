@@ -17,7 +17,7 @@ const Blog = ({ blog, handleLike, handleRemove, user }) => {
     setShowDetails(!showDetails)
     //hacer que aparezca el botón de remove cuando se renderiza la primera vez(?)
   }
-  console.log(blog.user)
+
   return (
     <div className="blog" style={blogStyle}>
       <div>

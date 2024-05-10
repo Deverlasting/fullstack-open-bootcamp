@@ -20,7 +20,16 @@ const App = () => {
 
   useEffect(() => {
     blogService.getAll().then((blogs) => setBlogs(blogs))
-  }, [])
+  }, []) // no es lo ideal pero hace un intento de refrescar los blogs automáticamente
+
+  const correctNotification = () => {
+    setTypeMessage("correct")
+    setNotificationMessage(`blog added correctly`)
+    setTimeout(() => {
+      setTypeMessage(null)
+      setNotificationMessage(null)
+    }, 5000)
+  }
 
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem("loggedBlogAppUser")
@@ -83,15 +92,6 @@ const App = () => {
   //   }, 5000)
   // }
 
-  const correctNotification = () => {
-    setTypeMessage("correct")
-    setNotificationMessage(`blog added correctly`)
-    setTimeout(() => {
-      setTypeMessage(null)
-      setNotificationMessage(null)
-    }, 5000)
-  }
-
   const sortByLikes = (a, b) => {
     return b.likes - a.likes // Orden descendente
   }
@@ -147,6 +147,9 @@ const App = () => {
         <CreateBlogForm
           // onSubmit={handleSubmit}
           correctNotification={correctNotification}
+          blogs={blogs}
+          setBlogs={setBlogs}
+          user={user}
           // title={title}
           // handleTitleChange={(value) => setTitle(value)} //este es que funciona
           // author={author}

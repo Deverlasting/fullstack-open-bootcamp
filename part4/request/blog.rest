@@ -14,7 +14,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IlBlc
 ###
 POST http://localhost:3003/api/blogs/ HTTP/1.1
 content-type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImNhbnRhcmluYTkzIiwiaWQiOiI2NjMzYzc0Yzg5N2UyMWYzNWVkNTBlNTUiLCJpYXQiOjE3MTQ3NjEwNDd9.24UqDx5oDoa6twO88QcEFYfG4d4W4SdqFZpNqQkyBa0
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImNhbnRhcmluYTkzIiwiaWQiOiI2NjNiNGRhN2MzNzM3OTBhY2I4YzE5MmUiLCJpYXQiOjE3MTUxNzIxMzR9.p_ftUnuzqyz0lFN9yU310LgTs-MjoGvn9IigUsVXE28
 
 {
     "title": "Sandwich mixto",
