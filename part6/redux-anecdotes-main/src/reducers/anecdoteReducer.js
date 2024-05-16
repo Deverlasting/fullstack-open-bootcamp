@@ -18,9 +18,6 @@ const anecdoteSlice = createSlice({
         anecdote.id === id ? votedAnecdote : anecdote
       );
     },
-    // createAnecdote(state, action) {
-    //   state.push(action.payload)
-    // },
     appendAnecdote(state, action) {
       state.push(action.payload)
     },
