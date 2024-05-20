@@ -1,18 +1,11 @@
-const Notification = () => {
-  const style = {
-    border: 'solid',
-    padding: 10,
-    borderWidth: 1,
-    marginBottom: 5
-  }
-  
-  if (true) return null
+import React from "react"
 
-  return (
-    <div style={style}>
-      
-    </div>
-  )
+const Notification = ({ message, isVisible }) => {
+  if (!isVisible) {
+    return null
+  }
+
+  return <div>{message}</div>
 }
 
 export default Notification
