@@ -19,25 +19,20 @@ const useCountry = (name) => {
   const [country, setCountry] = useState(null)
 
   useEffect(() => {
-    if (name) {
-      axios
-        .get(`https://studies.cs.helsinki.fi/restcountries/api/name/${name}`)
-        .then((response) => {
-          if (response.data.length > 0) {
-            setCountry({ data: response.data[0], found: true })
-          } else {
-            setCountry({ found: false })
-          }
-        })
-        .catch((error) => {
-          console.log(error)
-          setCountry({ found: false })
-        })
-    } else {
-      setCountry(null)
+    if (!name) return
+
+    const fetchCountry = async () => {
+      try {
+        const response = await axios.get(`https://studies.cs.helsinki.fi/restcountries/api/name/${name}`)
+        setCountry({ found: true, data: response.data })
+      } catch (error) {
+        setCountry({ found: false })
+      }
     }
+
+    // console.log("country-useEffect", country)
+    fetchCountry()
   }, [name])
-  console.log(country)
   return country
 }
 
@@ -49,13 +44,14 @@ const Country = ({ country }) => {
   if (!country.found) {
     return <div>not found...</div>
   }
-
+  useCountry("finland")
+  // console.log(country.data)
   return (
     <div>
-      <h3>{country.data.name} </h3>
-      <div>capital {country.data.capital} </div>
+      <h3>{country.data.name.common}</h3>
+      <div>capital {country.data.capital}</div>
       <div>population {country.data.population}</div>
-      <img src={country.data.flag} height="100" alt={`flag of ${country.data.name}`} />
+      <img src={country.data.flags.png} height="100" alt={`flag of ${country.data.name.common}`} />
     </div>
   )
 }
@@ -68,6 +64,7 @@ const App = () => {
   const fetch = (e) => {
     e.preventDefault()
     setName(nameInput.value)
+    // console.log("nameInput", nameInput.value)
   }
 
   return (
@@ -78,7 +75,6 @@ const App = () => {
       </form>
 
       <Country country={country} />
-      {/* <Country country="finland" /> */}
     </div>
   )
 }
