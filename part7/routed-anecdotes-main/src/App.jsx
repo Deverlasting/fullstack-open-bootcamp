@@ -75,22 +75,32 @@ const Footer = () => (
 )
 
 const CreateNew = (props) => {
-  const [content, setContent] = useState("")
-  const [author, setAuthor] = useState("")
-  const [info, setInfo] = useState("")
   const navigate = useNavigate()
-  const textField = useField("text")
+  const content = useField("text")
+  const author = useField("text")
+  const info = useField("text")
 
   const handleSubmit = (e) => {
     e.preventDefault()
     props.addNew({
-      content,
-      author,
-      info,
+      content: content.value,
+      author: author.value,
+      info: info.value,
       votes: 0,
     })
-    props.setNotification(`Anecdote "${content}" created!`)
+    props.setNotification(`Anecdote "${content.value}" created!`)
     navigate("/")
+  }
+
+  const resetFields = () => {
+    content.reset()
+    author.reset()
+    info.reset()
+  }
+  //separa el reset del type, value y onChange
+  const returnOnlyProps = (props) => {
+    const { reset, ...inputProps } = props
+    return inputProps
   }
 
   return (
@@ -99,40 +109,23 @@ const CreateNew = (props) => {
       <form onSubmit={handleSubmit}>
         <div>
           content
-          <input name={"content"} value={textField.value} onChange={(e) => setContent(textField.onChange)} />
+          <input value={content.value} onChange={content.onChange} />
         </div>
         <div>
           author
-          <input name="author" value={author} onChange={(e) => setAuthor(e.target.value)} />
+          <input {...returnOnlyProps(author)} />
         </div>
         <div>
           url for more info
-          <input name="info" value={info} onChange={(e) => setInfo(e.target.value)} />
+          <input {...returnOnlyProps(info)} />
         </div>
-        <button>create</button>
+        <button type="submit">create</button>
+        <button type="button" onClick={resetFields}>
+          reset
+        </button>
       </form>
     </div>
   )
-  // return (
-  //   <div>
-  //     <h2>create a new anecdote</h2>
-  //     <form onSubmit={handleSubmit}>
-  //       <div>
-  //         content
-  //         <input name="content" value={content} onChange={(e) => setContent(e.target.value)} />
-  //       </div>
-  //       <div>
-  //         author
-  //         <input name="author" value={author} onChange={(e) => setAuthor(e.target.value)} />
-  //       </div>
-  //       <div>
-  //         url for more info
-  //         <input name="info" value={info} onChange={(e) => setInfo(e.target.value)} />
-  //       </div>
-  //       <button>create</button>
-  //     </form>
-  //   </div>
-  // )
 }
 
 const Notification = ({ message }) => {
