@@ -6,6 +6,9 @@ import Notification from "./components/Notification"
 import LoginForm from "./components/LoginForm"
 import CreateBlogForm from "./components/CreateBlogForm"
 
+import { setNotification, clearNotification } from "./reducers/notificationReducer"
+import { useDispatch } from "react-redux"
+
 const App = () => {
   const [blogs, setBlogs] = useState([])
   const [username, setUsername] = useState("")
@@ -18,17 +21,25 @@ const App = () => {
   const [notificationMessage, setNotificationMessage] = useState("")
   const [typeMessage, setTypeMessage] = useState()
 
+  const dispatch = useDispatch()
+  // const notification = useSelector((state) => state.notification)
+
   useEffect(() => {
     blogService.getAll().then((blogs) => setBlogs(blogs))
   }, []) // no es lo ideal pero hace un intento de refrescar los blogs automáticamente
 
   const correctNotification = () => {
-    setTypeMessage("correct")
-    setNotificationMessage(`blog added correctly`)
+    dispatch(setNotification("blog added correctly - redux", "correct"))
     setTimeout(() => {
-      setTypeMessage(null)
-      setNotificationMessage(null)
+      dispatch(clearNotification())
     }, 5000)
+    //sin redux
+    // setTypeMessage("correct")
+    // setNotificationMessage(`blog added correctly`)
+    // setTimeout(() => {
+    //   setTypeMessage(null)
+    //   setNotificationMessage(null)
+    // }, 5000)
   }
 
   useEffect(() => {
@@ -54,12 +65,16 @@ const App = () => {
       setUsername("")
       setPassword("")
     } catch (exception) {
-      setTypeMessage("error")
-      setNotificationMessage(`${exception.response.data.error}`)
+      // setTypeMessage("error")
+      // setNotificationMessage(`${exception.response.data.error}`)
 
+      // setTimeout(() => {
+      //   setTypeMessage(null)
+      //   setNotificationMessage(null)
+      // }, 5000)
+      dispatch(setNotification(`${exception.response.data.error} - redux`, "error"))
       setTimeout(() => {
-        setTypeMessage(null)
-        setNotificationMessage(null)
+        dispatch(clearNotification())
       }, 5000)
     }
   }
@@ -73,24 +88,6 @@ const App = () => {
   const loggedUserJSON = window.localStorage.getItem("loggedBlogAppUser")
   // Convertir el valor JSON a un objeto JavaScript
   const loggedUser = JSON.parse(loggedUserJSON)
-
-  // const handleSubmit = (event) => {
-  //   const blogObject = {
-  //     title: title,
-  //     author: author,
-  //     url: url,
-  //   }
-  //   blogService.create(blogObject).then((returnedBlog) => {
-  //     setBlogs((blogs) => [...blogs, { ...returnedBlog, user: loggedUser }])
-  //   })
-
-  //   setTypeMessage("correct")
-  //   setNotificationMessage(`blog added correctly`)
-  //   setTimeout(() => {
-  //     setTypeMessage(null)
-  //     setNotificationMessage(null)
-  //   }, 5000)
-  // }
 
   const sortByLikes = (a, b) => {
     return b.likes - a.likes // Orden descendente
