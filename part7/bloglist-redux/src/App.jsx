@@ -1,4 +1,5 @@
-import { useState, useEffect } from "react"
+import { useEffect, useState } from "react"
+import { useSelector, useDispatch } from "react-redux"
 import Blog from "./components/Blog"
 import blogService from "./services/blogs"
 import loginService from "./services/login"
@@ -7,39 +8,25 @@ import LoginForm from "./components/LoginForm"
 import CreateBlogForm from "./components/CreateBlogForm"
 
 import { setNotification, clearNotification } from "./reducers/notificationReducer"
-import { useDispatch } from "react-redux"
+import { initializeBlogs, updateBlogAction, setBlogs } from "./reducers/blogReducer"
 
 const App = () => {
-  const [blogs, setBlogs] = useState([])
+  const blogs = useSelector((state) => state.blogs)
   const [username, setUsername] = useState("")
   const [password, setPassword] = useState("")
   const [user, setUser] = useState(null)
-  // const [title, setTitle] = useState("")
-  // const [author, setAuthor] = useState("")
-  // const [url, setUrl] = useState("")
-
-  const [notificationMessage, setNotificationMessage] = useState("")
-  const [typeMessage, setTypeMessage] = useState()
 
   const dispatch = useDispatch()
-  // const notification = useSelector((state) => state.notification)
 
   useEffect(() => {
-    blogService.getAll().then((blogs) => setBlogs(blogs))
-  }, []) // no es lo ideal pero hace un intento de refrescar los blogs automáticamente
+    dispatch(initializeBlogs())
+  }, [])
 
   const correctNotification = () => {
     dispatch(setNotification("blog added correctly - redux", "correct"))
     setTimeout(() => {
       dispatch(clearNotification())
     }, 5000)
-    //sin redux
-    // setTypeMessage("correct")
-    // setNotificationMessage(`blog added correctly`)
-    // setTimeout(() => {
-    //   setTypeMessage(null)
-    //   setNotificationMessage(null)
-    // }, 5000)
   }
 
   useEffect(() => {
@@ -65,13 +52,6 @@ const App = () => {
       setUsername("")
       setPassword("")
     } catch (exception) {
-      // setTypeMessage("error")
-      // setNotificationMessage(`${exception.response.data.error}`)
-
-      // setTimeout(() => {
-      //   setTypeMessage(null)
-      //   setNotificationMessage(null)
-      // }, 5000)
       dispatch(setNotification(`${exception.response.data.error} - redux`, "error"))
       setTimeout(() => {
         dispatch(clearNotification())
@@ -84,41 +64,50 @@ const App = () => {
     location.reload()
   }
 
-  // Obtener el valor de "loggedBlogAppUser" del localStorage
-  const loggedUserJSON = window.localStorage.getItem("loggedBlogAppUser")
-  // Convertir el valor JSON a un objeto JavaScript
-  const loggedUser = JSON.parse(loggedUserJSON)
-
   const sortByLikes = (a, b) => {
-    return b.likes - a.likes // Orden descendente
+    return b.likes - a.likes
   }
 
-  const handleLike = async (blog) => {
+  // const handleLike = async (blog) => {
+  //   const updatedBlog = {
+  //     ...blog,
+  //     likes: blog.likes + 1,
+  //   }
+
+  //   await blogService.update(blog.id, updatedBlog)
+  //   dispatch(initializeBlogs())
+  // }
+
+  const handleLike = async (blogToUpdate) => {
     const updatedBlog = {
-      // ...blog,
-      likes: blog.likes + 1,
+      ...blogToUpdate,
+      likes: blogToUpdate.likes + 1,
     }
 
-    await blogService.update(blog.id, updatedBlog)
-    // setBlogs(blogs.map((b) => (b.id === updatedBlog.id ? updatedBlogs : b)))
+    // await blogService.update(blogToUpdate.id, updatedBlog)
+    // const updatedBlogs = blogs.map((blog) => (blog.id === blogToUpdate.id ? updatedBlog : blog))
+    // dispatch(setBlogs(updatedBlogs))
+    await blogService.update(updatedBlog.id, updatedBlog)
+    // const updatedBlogs = blogs.map((blog) => (blog.id === blogToUpdate.id ? updatedBlog : { ...blog }))
 
-    blogService.getAll().then((blogs) => setBlogs(blogs))
+    dispatch(updateBlogAction(updatedBlog))
   }
 
   const handleRemove = async (blog) => {
     if (window.confirm(`Remove ${blog.title}?`)) {
       await blogService.remove(blog.id)
-
-      blogService.getAll().then((blogs) => setBlogs(blogs))
-      // onRemove()
+      dispatch(initializeBlogs())
     }
   }
 
-  //RENDER
+  // const handleSetBlogs = (newBlogs) => {
+  //   dispatch(setBlogs(newBlogs))
+  // }
+
   if (user === null) {
     return (
       <div>
-        <Notification notificationMessage={notificationMessage} typeMessage={typeMessage} />
+        <Notification />
         <LoginForm
           handleLogin={handleLogin}
           username={username}
@@ -131,29 +120,24 @@ const App = () => {
   } else {
     return (
       <div>
-        <Notification notificationMessage={notificationMessage} typeMessage={typeMessage} />
+        <Notification />
         <div>
           <h2>blogs</h2>
-          <h3>{loggedUser.name}</h3>
+          <h3>{user.name}</h3>
 
           {blogs.sort(sortByLikes).map((blog) => (
             <Blog user={user} handleLike={handleLike} handleRemove={handleRemove} key={blog.id} blog={blog} />
+            // <Blog key={blog.id} user={user} blog={blog} handleLike={() => handleLike(blog)} handleRemove={() => {}} />
           ))}
         </div>
 
-        <CreateBlogForm
-          // onSubmit={handleSubmit}
+        {/* <CreateBlogForm
           correctNotification={correctNotification}
           blogs={blogs}
-          setBlogs={setBlogs}
+          setBlogs={(newBlogs) => dispatch(setBlogs(newBlogs))}
+          // setBlogs={handleSetBlogs}
           user={user}
-          // title={title}
-          // handleTitleChange={(value) => setTitle(value)} //este es que funciona
-          // author={author}
-          // handleAuthorChange={({ target }) => setAuthor(target.value)}
-          // url={url}
-          // handleUrlChange={({ target }) => setUrl(target.value)}
-        />
+        /> */}
         <button onClick={handleLogOut}>Log out</button>
       </div>
     )
