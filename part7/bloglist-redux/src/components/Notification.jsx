@@ -3,13 +3,10 @@ import "../index.css"
 
 const Notification = () => {
   const notification = useSelector((state) => state.notification)
-  console.log(notification)
   if (!notification || !notification.message) {
     return null
   }
   const { message, messageType } = notification
-
-  // const { message, type } = useSelector((state) => state.notification)
 
   if (message === null) {
     return null

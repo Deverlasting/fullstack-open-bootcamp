@@ -1,61 +1,70 @@
-// src/reducers/blogReducer.js
-import blogService from '../services/blogs'
+import blogService from '../services/blogs';
 
 // Action types
-const SET_BLOGS = 'SET_BLOGS'
-const UPDATE_BLOG = 'UPDATE_BLOG'
-// const CREATE_BLOG = 'CREATE_BLOG'
+const SHOW_BLOGS = 'SHOW_BLOGS'
+const ADD_BLOG = 'ADD_BLOG'
+const LIKE_BLOG = 'LIKE_BLOG'
+const REMOVE_BLOG = 'REMOVE_BLOG'
 
 // Action creators
-export const setBlogs = (blogs) => {
+export const showBlogsAction = (blogs) => {
     return {
-        type: SET_BLOGS,
-        data: blogs,
+        type: SHOW_BLOGS,
+        payload: blogs,
     }
 }
 
-export const updateBlogAction = (blog) => {
+export const addBlogAction = (blog) => {
     return {
-        type: UPDATE_BLOG,
-        data: blog,
+        type: ADD_BLOG,
+        payload: blog,
+    }
+};
+
+export const likeBlogAction = (blog) => {
+    return {
+        type: LIKE_BLOG,
+        payload: blog,
     }
 }
 
-// export const createBlogAction = (blog) => {
-//     return {
-//         type: CREATE_BLOG,
-//         data: blog,
-//     }
-// }
-
-
-// Thunk action creator for fetching blogs
-export const initializeBlogs = () => {
+// Thunk action creators
+export const getAllBlogs = () => {
     return async (dispatch) => {
-        const blogs = await blogService.getAll()
-        dispatch(setBlogs(blogs))
-    }
-}
+        const blogs = await blogService.getAll();
+        dispatch(showBlogsAction(blogs));
+    };
+};
+
+export const likeBlog = (blog) => {
+    return async (dispatch) => {
+        const updatedBlog = {
+            ...blog,
+            likes: blog.likes + 1,
+        }
+        await blogService.update(blog.id, updatedBlog)
+        dispatch(likeBlogAction(updatedBlog))
+    };
+};
+
+
 
 // Reducer
 const blogReducer = (state = [], action) => {
     switch (action.type) {
-        case SET_BLOGS:
-            // return action.data
-            return action.data
-        case UPDATE_BLOG:
-            // return action.data
-            // console.log(state, action)
-            // const updatedBlogs = state.map((blog) => (blog.id === action.data.id ? action.data : blog))
-            // return updatedBlogs
-            return state
-        // case CREATE_BLOG:
-        //     // return action.data
-        //     return [...state, action.data]
+        case SHOW_BLOGS:
+            return action.payload
+        case ADD_BLOG:
+            return [...state, action.payload];
+        case LIKE_BLOG:
+            return state.map((blog) =>
+                blog.id === action.payload.id ? { ...blog, likes: blog.likes + 1 } : blog
+                // blog.id === action.payload.id ? action.payload : blog
+            )
         default:
             return state
 
     }
 }
 
-export default blogReducer
+export default blogReducer;

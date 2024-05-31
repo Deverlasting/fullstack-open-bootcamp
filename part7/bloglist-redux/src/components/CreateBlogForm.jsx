@@ -1,29 +1,28 @@
-import { useDispatch, useSelector } from "react-redux"
-import { setTitle, setAuthor, setUrl, resetForm } from "../reducers/createBlogFormReducer"
 import { useState } from "react"
 import blogService from "../services/blogs"
-import { initializeBlogs } from "../reducers/blogReducer"
+import { useDispatch } from "react-redux"
+import { addBlogAction } from "../reducers/blogReducer"
 
-export const CreateBlogForm = ({ correctNotification, blogs, setBlogs, user }) => {
-  const dispatch = useDispatch()
-  const { title, author, url } = useSelector((state) => state.createBlogForm)
+export const CreateBlogForm = ({ correctNotification, user }) => {
   const [createBlogVisible, setCreateBlogVisible] = useState(false)
 
   const hideWhenVisible = { display: createBlogVisible ? "none" : "" }
   const showWhenVisible = { display: createBlogVisible ? "" : "none" }
 
-  // const [title, setTitle] = useState("")
-  // const [author, setAuthor] = useState("")
-  // const [url, setUrl] = useState("")
+  const [title, setTitle] = useState("")
+  const [author, setAuthor] = useState("")
+  const [url, setUrl] = useState("")
+
+  const dispatch = useDispatch()
 
   const handleChangeTitle = (event) => {
-    dispatch(setTitle(event.target.value))
+    setTitle(event.target.value)
   }
   const handleChangeAuthor = (event) => {
-    dispatch(setAuthor(event.target.value))
+    setAuthor(event.target.value)
   }
   const handleChangeUrl = (event) => {
-    dispatch(setUrl(event.target.value))
+    setUrl(event.target.value)
   }
 
   const handleSubmit = async (event) => {
@@ -32,17 +31,10 @@ export const CreateBlogForm = ({ correctNotification, blogs, setBlogs, user }) =
       title: title,
       author: author,
       url: url,
+      // likes: 0,
     }
-    // blogService.create(blogObject).then((returnedBlog) => {
-    //   // setBlogs((blogs) => [...blogs, { ...returnedBlog, user: loggedUser }])
-    //   setBlogs((blogs) => [...blogs, { ...returnedBlog, user: user }])
-    // })
-    // correctNotification()
-    // const returnedBlog = await blogService.create(blogObject)
-    // setBlogs([...blogs, { ...returnedBlog, user }])
-    await blogService.create(blogObject)
-    dispatch(initializeBlogs()) //cada vez que se crea un nuevo se hace una petición con todos los blogs
-    dispatch(resetForm())
+    const returnedBlog = await blogService.create(blogObject)
+    dispatch(addBlogAction({ ...returnedBlog, user: user }))
     correctNotification()
   }
 
