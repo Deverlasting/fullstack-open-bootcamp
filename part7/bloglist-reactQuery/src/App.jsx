@@ -1,33 +1,34 @@
-import { useState, useEffect } from "react"
+import { useState, useEffect, useReducer } from "react"
 import Blog from "./components/Blog"
 import blogService from "./services/blogs"
 import loginService from "./services/login"
 import Notification from "./components/Notification"
 import LoginForm from "./components/LoginForm"
 import CreateBlogForm from "./components/CreateBlogForm"
+import notificationReducer, { setNotificationAction, clearNotificationAction } from "./reducers/notificationReducer"
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
   const [username, setUsername] = useState("")
   const [password, setPassword] = useState("")
   const [user, setUser] = useState(null)
-  // const [title, setTitle] = useState("")
-  // const [author, setAuthor] = useState("")
-  // const [url, setUrl] = useState("")
 
-  const [notificationMessage, setNotificationMessage] = useState("")
-  const [typeMessage, setTypeMessage] = useState()
+  // const [notificationMessage, setNotificationMessage] = useState("")
+  // const [typeMessage, setTypeMessage] = useState()
+  //notificationState = state y dispatch = action?
+  const [notificationState, dispatch] = useReducer(notificationReducer, {
+    message: null,
+    messageType: null,
+  })
 
   useEffect(() => {
     blogService.getAll().then((blogs) => setBlogs(blogs))
   }, []) // no es lo ideal pero hace un intento de refrescar los blogs automáticamente
 
   const correctNotification = () => {
-    setTypeMessage("correct")
-    setNotificationMessage(`blog added correctly`)
+    dispatch(setNotificationAction("blog added correctly - useReducer (React query Exercise)", "correct"))
     setTimeout(() => {
-      setTypeMessage(null)
-      setNotificationMessage(null)
+      dispatch(clearNotificationAction())
     }, 5000)
   }
 
@@ -54,12 +55,9 @@ const App = () => {
       setUsername("")
       setPassword("")
     } catch (exception) {
-      setTypeMessage("error")
-      setNotificationMessage(`${exception.response.data.error}`)
-
+      dispatch(setNotificationAction(exception.response.data.error, "error"))
       setTimeout(() => {
-        setTypeMessage(null)
-        setNotificationMessage(null)
+        dispatch(clearNotificationAction())
       }, 5000)
     }
   }
@@ -121,7 +119,7 @@ const App = () => {
   if (user === null) {
     return (
       <div>
-        <Notification notificationMessage={notificationMessage} typeMessage={typeMessage} />
+        <Notification notificationMessage={notificationState.message} typeMessage={notificationState.messageType} />
         <LoginForm
           handleLogin={handleLogin}
           username={username}
@@ -134,7 +132,7 @@ const App = () => {
   } else {
     return (
       <div>
-        <Notification notificationMessage={notificationMessage} typeMessage={typeMessage} />
+        <Notification notificationMessage={notificationState.message} typeMessage={notificationState.messageType} />
         <div>
           <h2>blogs</h2>
           <h3>{loggedUser.name}</h3>
