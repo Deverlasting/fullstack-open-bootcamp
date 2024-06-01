@@ -7,16 +7,21 @@ import LoginForm from "./components/LoginForm"
 import CreateBlogForm from "./components/CreateBlogForm"
 
 import { setNotification, clearNotification } from "./reducers/notificationReducer"
-import { getAllBlogs, likeBlog } from "./reducers/blogReducer"
+import { getAllBlogs, likeBlog, removeBlog } from "./reducers/blogReducer"
 import { useSelector, useDispatch } from "react-redux"
+import {
+  loginUser,
+  // setUserFromLocalStorageAction,
+  setUserAction,
+  // setUsernameAction,
+  // setPasswordAction,
+} from "./reducers/userReducer"
 
 const App = () => {
   const blogs = useSelector((state) => state.blogs)
-
-  const [username, setUsername] = useState("")
-  const [password, setPassword] = useState("")
-  const [user, setUser] = useState(null)
-
+  const user = useSelector((state) => state.user.user)
+  const username = useSelector((state) => state.user.username)
+  const password = useSelector((state) => state.user.password)
   const dispatch = useDispatch()
 
   useEffect(() => {
@@ -34,7 +39,10 @@ const App = () => {
     const loggedUserJSON = window.localStorage.getItem("loggedBlogAppUser")
     if (loggedUserJSON) {
       const user = JSON.parse(loggedUserJSON)
-      setUser(user)
+      // setUser(user)
+      // dispatch(loginUser(user.username, user.password))
+      dispatch(setUserAction(user))
+      // dispatch(setUserFromLocalStorageAction(user))
       blogService.setToken(user.token)
     }
   }, [])
@@ -42,22 +50,7 @@ const App = () => {
   const handleLogin = async (event) => {
     event.preventDefault()
 
-    try {
-      const user = await loginService.login({
-        username,
-        password,
-      })
-      window.localStorage.setItem("loggedBlogAppUser", JSON.stringify(user))
-      blogService.setToken(user.token)
-      setUser(user)
-      setUsername("")
-      setPassword("")
-    } catch (exception) {
-      dispatch(setNotification(`${exception.response.data.error} - redux`, "error"))
-      setTimeout(() => {
-        dispatch(clearNotification())
-      }, 5000)
-    }
+    dispatch(loginUser(username, password))
   }
 
   const handleLogOut = () => {
@@ -75,69 +68,38 @@ const App = () => {
   }
 
   const handleLike = async (likedBlog) => {
-    // const updatedBlog = {
-    //   // ...blog,
-    //   likes: blog.likes + 1,
-    // }
-
-    // await blogService.update(blog.id, updatedBlog)
-    // // setBlogs(blogs.map((b) => (b.id === updatedBlog.id ? updatedBlogs : b)))
-
-    // blogService.getAll().then((blogs) => setBlogs(blogs))
     dispatch(likeBlog(likedBlog))
   }
 
   const handleRemove = async (blog) => {
-    if (window.confirm(`Remove ${blog.title}?`)) {
-      await blogService.remove(blog.id)
-
-      blogService.getAll().then((blogs) => setBlogs(blogs))
-      // onRemove()
-    }
+    dispatch(removeBlog(blog))
   }
 
   //RENDER
   if (user === null) {
     return (
       <div>
-        <h1>Redux 2</h1>
+        <h1>Redux</h1>
         <Notification />
-        <LoginForm
-          handleLogin={handleLogin}
-          username={username}
-          handleUsernameChange={({ target }) => setUsername(target.value)}
-          password={password}
-          handlePasswordChange={({ target }) => setPassword(target.value)}
-        />
+        <LoginForm handleLogin={handleLogin} />
       </div>
     )
   } else {
     return (
       <div>
-        <h1>Redux 2</h1>
+        <h1>Redux</h1>
         <Notification />
         <div>
           <h2>blogs</h2>
           <h3>{loggedUser.name}</h3>
 
-          {blogs.sort(sortByLikes).map((blog) => (
+          {/* {blogs.sort(sortByLikes).map((blog) => ( */}
+          {[...blogs].sort(sortByLikes).map((blog) => (
             <Blog user={user} handleLike={handleLike} handleRemove={handleRemove} key={blog.id} blog={blog} />
           ))}
         </div>
 
-        <CreateBlogForm
-          // onSubmit={handleSubmit}
-          correctNotification={correctNotification}
-          blogs={blogs}
-          // setBlogs={setBlogs}
-          user={user}
-          // title={title}
-          // handleTitleChange={(value) => setTitle(value)} //este es que funciona
-          // author={author}
-          // handleAuthorChange={({ target }) => setAuthor(target.value)}
-          // url={url}
-          // handleUrlChange={({ target }) => setUrl(target.value)}
-        />
+        <CreateBlogForm correctNotification={correctNotification} blogs={blogs} user={user} />
         <button onClick={handleLogOut}>Log out</button>
       </div>
     )

@@ -33,8 +33,14 @@ export const CreateBlogForm = ({ correctNotification, user }) => {
       url: url,
       // likes: 0,
     }
+    // dispatch(resetCreateBlogFormAction())
     const returnedBlog = await blogService.create(blogObject)
     dispatch(addBlogAction({ ...returnedBlog, user: user }))
+    // Reset form inputs
+    setTitle("")
+    setAuthor("")
+    setUrl("")
+
     correctNotification()
   }
 

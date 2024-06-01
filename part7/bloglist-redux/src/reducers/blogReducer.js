@@ -28,6 +28,14 @@ export const likeBlogAction = (blog) => {
     }
 }
 
+export const removeBlogAction = (blog) => {
+    return {
+        type: REMOVE_BLOG,
+        payload: blog,
+    }
+}
+
+
 // Thunk action creators
 export const getAllBlogs = () => {
     return async (dispatch) => {
@@ -47,6 +55,15 @@ export const likeBlog = (blog) => {
     };
 };
 
+export const removeBlog = (blog) => {
+    return async (dispatch) => {
+        if (window.confirm(`Remove ${blog.title}?`)) {
+            await blogService.remove(blog.id)
+        }
+        dispatch(getAllBlogs());
+    }
+}
+
 
 
 // Reducer
@@ -61,6 +78,8 @@ const blogReducer = (state = [], action) => {
                 blog.id === action.payload.id ? { ...blog, likes: blog.likes + 1 } : blog
                 // blog.id === action.payload.id ? action.payload : blog
             )
+        case REMOVE_BLOG:
+            return action.payload
         default:
             return state
 

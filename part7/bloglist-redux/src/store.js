@@ -1,14 +1,14 @@
 import { combineReducers } from 'redux';
 import notificationReducer from './reducers/notificationReducer';
 import blogReducer from './reducers/blogReducer';
-// import createBlogFormReducer from './reducers/createBlogFormReducer';
+import userReducer from './reducers/userReducer';
 
 import { configureStore } from '@reduxjs/toolkit'
 
 const reducer = combineReducers({
     notification: notificationReducer,
     blogs: blogReducer,
-    // createBlogForm: createBlogFormReducer,
+    user: userReducer,
 });
 
 const store = configureStore({
