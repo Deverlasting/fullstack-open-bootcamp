@@ -1,7 +1,8 @@
 import { useState } from "react"
 import blogService from "../services/blogs"
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query"
 
-export const CreateBlogForm = ({ correctNotification, blogs, setBlogs, user }) => {
+export const CreateBlogForm = ({ correctNotification, blogs, setBlogs, handleCreateBlog, user }) => {
   const [createBlogVisible, setCreateBlogVisible] = useState(false)
 
   const hideWhenVisible = { display: createBlogVisible ? "none" : "" }
@@ -10,6 +11,14 @@ export const CreateBlogForm = ({ correctNotification, blogs, setBlogs, user }) =
   const [title, setTitle] = useState("")
   const [author, setAuthor] = useState("")
   const [url, setUrl] = useState("")
+
+  const queryClient = useQueryClient()
+  const newBlogMutation = useMutation({
+    mutationFn: blogService.create,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["blogs"] })
+    },
+  })
 
   const handleChangeTitle = (event) => {
     setTitle(event.target.value)
@@ -28,10 +37,12 @@ export const CreateBlogForm = ({ correctNotification, blogs, setBlogs, user }) =
       author: author,
       url: url,
     }
-    blogService.create(blogObject).then((returnedBlog) => {
-      // setBlogs((blogs) => [...blogs, { ...returnedBlog, user: loggedUser }])
-      setBlogs((blogs) => [...blogs, { ...returnedBlog, user: user }])
-    })
+    newBlogMutation.mutate(blogObject)
+    // handleCreateBlog(blogObject)
+    // blogService.create(blogObject).then((returnedBlog) => {
+    //   // setBlogs((blogs) => [...blogs, { ...returnedBlog, user: loggedUser }])
+    //   setBlogs((blogs) => [...blogs, { ...returnedBlog, user: user }])
+    // })
     correctNotification()
   }
 
