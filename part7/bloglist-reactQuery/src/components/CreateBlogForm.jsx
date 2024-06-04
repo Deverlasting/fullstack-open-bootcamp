@@ -2,7 +2,7 @@ import { useState } from "react"
 import blogService from "../services/blogs"
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query"
 
-export const CreateBlogForm = ({ correctNotification, blogs, setBlogs, handleCreateBlog, user }) => {
+export const CreateBlogForm = ({ correctNotification }) => {
   const [createBlogVisible, setCreateBlogVisible] = useState(false)
 
   const hideWhenVisible = { display: createBlogVisible ? "none" : "" }
@@ -38,11 +38,12 @@ export const CreateBlogForm = ({ correctNotification, blogs, setBlogs, handleCre
       url: url,
     }
     newBlogMutation.mutate(blogObject)
-    // handleCreateBlog(blogObject)
-    // blogService.create(blogObject).then((returnedBlog) => {
-    //   // setBlogs((blogs) => [...blogs, { ...returnedBlog, user: loggedUser }])
-    //   setBlogs((blogs) => [...blogs, { ...returnedBlog, user: user }])
-    // })
+
+    // Reset form inputs
+    setTitle("")
+    setAuthor("")
+    setUrl("")
+
     correctNotification()
   }
 
