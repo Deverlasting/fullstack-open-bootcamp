@@ -1,7 +1,7 @@
 import { useState, useEffect, useReducer, useContext } from "react"
 import Blog from "./components/Blog"
 import blogService from "./services/blogs"
-import loginService from "./services/login"
+// import loginService from "./services/login"
 import Notification from "./components/Notification"
 import LoginForm from "./components/LoginForm"
 import CreateBlogForm from "./components/CreateBlogForm"
@@ -13,11 +13,6 @@ import { UserContext } from "./context/UserContext"
 import userReducer, { loginUserAction, setUsernameAction, setPasswordAction } from "./reducers/userReducer"
 
 const App = () => {
-  // const [blogs, setBlogs] = useState([])
-  // const [username, setUsername] = useState("")
-  // const [password, setPassword] = useState("")
-  // const [user, setUser] = useState(null)
-
   // const queryClient = new QueryClient()
   const queryClient = useQueryClient()
 
@@ -81,22 +76,22 @@ const App = () => {
   // }
   const handleLogin = async (event) => {
     event.preventDefault()
-    try {
-      const loginUser = await loginService.login({
-        username: user.username,
-        password: user.password,
-      })
+    // try {
+    //   const loginUser = await loginService.login({
+    //     username: user.username,
+    //     password: user.password,
+    //   })
 
-      window.localStorage.setItem("loggedBlogAppUser", JSON.stringify(loginUser))
-      blogService.setToken(loginUser.token)
-      // userDispatch(loginUserAction(loginUser))
-      userDispatch(loginUserAction(user))
-    } catch (error) {
-      dispatch(setNotificationAction(`${error.response.data.error} - ReactQuery`, "error"))
-      setTimeout(() => {
-        dispatch(clearNotificationAction())
-      }, 5000)
-    }
+    //   window.localStorage.setItem("loggedBlogAppUser", JSON.stringify(loginUser))
+    //   blogService.setToken(loginUser.token)
+    //   // userDispatch(loginUserAction(loginUser))
+    userDispatch(loginUser(user))
+    // } catch (error) {
+    //   dispatch(setNotificationAction(`${error.response.data.error} - ReactQuery`, "error"))
+    //   setTimeout(() => {
+    //     dispatch(clearNotificationAction())
+    //   }, 5000)
+    // }
   }
 
   const handleUsernameChange = (event) => {
