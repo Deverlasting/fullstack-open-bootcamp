@@ -1,30 +1,31 @@
-import { useState, useEffect, useReducer, useContext } from "react"
+import { useEffect, useReducer, useContext } from "react"
 import Blog from "./components/Blog"
 import blogService from "./services/blogs"
-// import loginService from "./services/login"
 import Notification from "./components/Notification"
 import LoginForm from "./components/LoginForm"
 import CreateBlogForm from "./components/CreateBlogForm"
-import notificationReducer, { setNotificationAction, clearNotificationAction } from "./reducers/notificationReducer"
+import notificationReducer, {
+  notificationInitialState,
+  setNotificationAction,
+  clearNotificationAction,
+} from "./reducers/notificationReducer"
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query"
-// import { loginUser } from "./reducers/userReducer"
-
-import { UserContext } from "./context/UserContext"
-import userReducer, { loginUserAction, setUsernameAction, setPasswordAction } from "./reducers/userReducer"
+import LoggedUserContext from "./context/LoggedUserContext"
+import { loginUserAction } from "./reducers/loggedUserReducer"
 
 const App = () => {
   // const queryClient = new QueryClient()
   const queryClient = useQueryClient()
 
-  const initialState = {
-    message: null,
-    messageType: null,
-  }
+  // const initialState = {
+  //   message: null,
+  //   messageType: null,
+  // }
   // En notificationState se guarda la info.
   // Dispatch puede acceder a las funciones de notificationReducer(setNotificationAction, clearNotificationAction)
-  const [notificationState, dispatch] = useReducer(notificationReducer, initialState)
-  const [user, userDispatch] = useContext(UserContext)
-  console.log("user APP", user)
+  const [notificationState, dispatch] = useReducer(notificationReducer, notificationInitialState)
+  const [user, userDispatch] = useContext(LoggedUserContext) //modificar nombre user - loggeduser
+
   const result = useQuery({
     queryKey: ["blogs"],
     queryFn: () => blogService.getAll(),
@@ -39,67 +40,26 @@ const App = () => {
     }, 5000)
   }
 
-  useEffect(() => {
-    const loggedUserJSON = window.localStorage.getItem("loggedBlogAppUser")
-    if (loggedUserJSON) {
-      const user = JSON.parse(loggedUserJSON)
-      // setUser(user)
-      // userDispatch(setUser)
-      userDispatch(loginUserAction(user))
-      blogService.setToken(user.token)
+  // useEffect(() => {
+  //   const loggedUserJSON = window.localStorage.getItem("loggedBlogAppUser")
+  //   if (loggedUserJSON) {
+  //     const loginUser = JSON.parse(loggedUserJSON)
+  //     // setUser(user)
+  //     // userDispatch(setUser)
+  //     loginUserDispatch(loginUserAction(loginUser))
+  //     blogService.setToken(loginUser.token)
+  //   }
+  // }, [])
+
+  const handleLogin = async (userFormValues) => {
+    try {
+      userDispatch(await loginUserAction(userFormValues.username, userFormValues.password, dispatch))
+    } catch (error) {
+      dispatch(setNotificationAction(`${error.response.data.error} - ReacqQuery`, "error"))
+      setTimeout(() => {
+        dispatch(clearNotificationAction())
+      }, 5000)
     }
-  }, [])
-
-  // const handleLogin = async (event) => {
-  //   event.preventDefault()
-
-  //   // try {
-  //   const user = await loginService.login({
-  //     username,
-  //     password,
-  //   })
-  //   window.localStorage.setItem("loggedBlogAppUser", JSON.stringify(user))
-  //   blogService.setToken(user.token)
-  //   dispatch(loginUser(username, password))
-  //   // dispatch(loginUser(username, password))
-  //   // dispatch(loginUser(username, password))
-  //   // dispatch(loginUser(username, password))
-  //   // setUser(user)
-  //   // setUsername("")
-  //   // setPassword("")
-  //   // } catch (exception) {
-  //   // dispatch(setNotificationAction(exception.response.data.error, "error"))
-  //   // setTimeout(() => {
-  //   //   dispatch(clearNotificationAction())
-  //   // }, 5000)
-  //   // }
-  // }
-  const handleLogin = async (event) => {
-    event.preventDefault()
-    // try {
-    //   const loginUser = await loginService.login({
-    //     username: user.username,
-    //     password: user.password,
-    //   })
-
-    //   window.localStorage.setItem("loggedBlogAppUser", JSON.stringify(loginUser))
-    //   blogService.setToken(loginUser.token)
-    //   // userDispatch(loginUserAction(loginUser))
-    userDispatch(loginUser(user))
-    // } catch (error) {
-    //   dispatch(setNotificationAction(`${error.response.data.error} - ReactQuery`, "error"))
-    //   setTimeout(() => {
-    //     dispatch(clearNotificationAction())
-    //   }, 5000)
-    // }
-  }
-
-  const handleUsernameChange = (event) => {
-    userDispatch(setUsernameAction(event.target.value))
-  }
-
-  const handlePasswordChange = (event) => {
-    userDispatch(setPasswordAction(event.target.value))
   }
 
   const handleLogOut = () => {
@@ -107,10 +67,10 @@ const App = () => {
     location.reload()
   }
 
-  // Obtener el valor de "loggedBlogAppUser" del localStorage
-  const loggedUserJSON = window.localStorage.getItem("loggedBlogAppUser")
-  // Convertir el valor JSON a un objeto JavaScript
-  const loggedUser = JSON.parse(loggedUserJSON)
+  // // Obtener el valor de "loggedBlogAppUser" del localStorage
+  // const loggedUserJSON = window.localStorage.getItem("loggedBlogAppUser")
+  // // Convertir el valor JSON a un objeto JavaScript
+  // const loggedUser = JSON.parse(loggedUserJSON)
 
   const sortByLikes = (a, b) => {
     return b.likes - a.likes // Orden descendente
@@ -146,20 +106,13 @@ const App = () => {
       })
     },
   })
-
   // RENDER
-  // if (user.user === null) {
-  if (loggedUser === null) {
+  if (user.token === null) {
+    // if (loggedUser === null) {
     return (
       <div>
         <Notification notificationMessage={notificationState.message} typeMessage={notificationState.messageType} />
-        <LoginForm
-          handleLogin={handleLogin}
-          username={user.username}
-          handleUsernameChange={handleUsernameChange}
-          password={user.password}
-          handlePasswordChange={handlePasswordChange}
-        />
+        <LoginForm onSubmit={handleLogin} />
       </div>
     )
   } else {
@@ -169,12 +122,12 @@ const App = () => {
           <Notification notificationMessage={notificationState.message} typeMessage={notificationState.messageType} />
           <div>
             <h2>blogs</h2>
-            <h3>{loggedUser.name}</h3>
+            <h3>{user.name}</h3>
 
             {blogs.sort(sortByLikes).map((blog) => (
               <Blog
                 // user={user}
-                user={user.user}
+                user={user}
                 handleLike={() => handleLikeMutation.mutate(blog)}
                 handleRemove={() => handleRemoveMutation.mutate(blog)}
                 key={blog.id}

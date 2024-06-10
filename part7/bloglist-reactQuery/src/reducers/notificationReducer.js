@@ -1,4 +1,5 @@
-const initialState = {
+
+export const notificationInitialState = {
     message: null,
     messageType: null
 };
@@ -17,7 +18,7 @@ export const clearNotificationAction = () => ({
     type: CLEAR_NOTIFICATION
 });
 
-const notificationReducer = (state = initialState, action) => {
+const notificationReducer = (state = notificationInitialState, action) => {
     switch (action.type) {
         case SET_NOTIFICATION:
             return {
@@ -26,7 +27,7 @@ const notificationReducer = (state = initialState, action) => {
                 messageType: action.payload.messageType
             };
         case CLEAR_NOTIFICATION:
-            return initialState;
+            return notificationInitialState;
         default:
             return state;
     }
