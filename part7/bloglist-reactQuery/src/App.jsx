@@ -13,6 +13,10 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query"
 import LoggedUserContext from "./context/LoggedUserContext"
 import { loginUserAction } from "./reducers/loggedUserReducer"
 
+import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom"
+import UsersBasicInfo from "./components/UsersBasicInfo"
+import IndividualUserInfo from "./components/IndividualUserInfo"
+
 const App = () => {
   // const queryClient = new QueryClient()
   const queryClient = useQueryClient()
@@ -138,6 +142,26 @@ const App = () => {
 
           <CreateBlogForm correctNotification={correctNotification} />
           <button onClick={handleLogOut}>Log out</button>
+
+          <h2>***View section***</h2>
+          {/* <UsersBasicInfo />
+          <LoginUserInfo /> */}
+          <Router>
+            <div>
+              {/* <Link to="/">home</Link> */}
+              <Link to="/usersBasicInfo">Basic info from users</Link>
+              <br />
+              <Link to="/IndividualUserInfo">Individual user info</Link>
+              <br />
+            </div>
+
+            <Routes>
+              {/* <Route path="/" element={<Home />} /> */}
+              <Route path="/UsersBasicInfo" element={<UsersBasicInfo />} />
+              <Route path="/IndividualUserInfo" element={<IndividualUserInfo />} />
+              {/* <Route path="/users" element={<Users />} /> */}
+            </Routes>
+          </Router>
         </div>
       )
     } else {
