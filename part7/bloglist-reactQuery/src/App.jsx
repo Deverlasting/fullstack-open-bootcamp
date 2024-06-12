@@ -1,4 +1,4 @@
-import { useEffect, useReducer, useContext } from "react"
+import { useEffect, useReducer, useContext, useState } from "react"
 import Blog from "./components/Blog"
 import blogService from "./services/blogs"
 import Notification from "./components/Notification"
@@ -14,8 +14,11 @@ import LoggedUserContext from "./context/LoggedUserContext"
 import { loginUserAction } from "./reducers/loggedUserReducer"
 
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom"
-import UsersBasicInfo from "./components/UsersBasicInfo"
-import IndividualUserInfo from "./components/IndividualUserInfo"
+import Users from "./components/Users"
+import UserAddedBlogs from "./components/UserAddedBlogs"
+
+import axios from "axios"
+import BlogView from "./views/BlogView"
 
 const App = () => {
   // const queryClient = new QueryClient()
@@ -110,6 +113,21 @@ const App = () => {
       })
     },
   })
+
+  /////VIEWS//////
+  const [allUsers, setAllUsers] = useState()
+
+  const getAllUsers = async () => {
+    const baseUrl = "/api/users"
+    const response = await axios.get(baseUrl)
+    const users = response.data
+    setAllUsers(users)
+  }
+
+  useEffect(() => {
+    getAllUsers()
+  }, [])
+  ////VIEWS END//////////////////////////////////////////////
   // RENDER
   if (user.token === null) {
     // if (loggedUser === null) {
@@ -148,18 +166,21 @@ const App = () => {
           <LoginUserInfo /> */}
           <Router>
             <div>
-              {/* <Link to="/">home</Link> */}
-              <Link to="/usersBasicInfo">Basic info from users</Link>
+              <Link to="/">Clear</Link>
               <br />
-              <Link to="/IndividualUserInfo">Individual user info</Link>
+              <Link to="/users">Basic info from users</Link>
+              <br />
               <br />
             </div>
 
             <Routes>
-              {/* <Route path="/" element={<Home />} /> */}
-              <Route path="/UsersBasicInfo" element={<UsersBasicInfo />} />
-              <Route path="/IndividualUserInfo" element={<IndividualUserInfo />} />
-              {/* <Route path="/users" element={<Users />} /> */}
+              <Route path="/" element={<div />} /> {/* renderiza un div vacío, limpia la sección, no muestra nada */}
+              <Route path="/users/:id" element={<UserAddedBlogs allUsers={allUsers} blogs={blogs} />} />
+              <Route path="/users" element={<Users allUsers={allUsers} />} />
+              <Route
+                path="/blogs/:id"
+                element={<BlogView blogs={blogs} handleLike={() => handleLikeMutation.mutate(blog)} />}
+              />
             </Routes>
           </Router>
         </div>
