@@ -2,7 +2,7 @@ const blogsRouter = require('express').Router()
 const Blog = require('../models/blog')
 const User = require('../models/user')
 const jwt = require('jsonwebtoken')
-
+const Comment = require('../models/comment')
 
 // //aísla el token del encabezado authorization.
 // const getTokenFrom = request => {
@@ -14,7 +14,8 @@ const jwt = require('jsonwebtoken')
 // }
 
 blogsRouter.get('/', async (request, response) => {
-    const blogs = await Blog.find({}).populate('user', { username: 1, name: 1 })
+    const blogs = await Blog.find({}).populate('user', { username: 1, name: 1 }).populate('comments', { content: 1 })
+    // const blogs = await Blog.find({})
     response.json(blogs)
 })
 
@@ -98,6 +99,26 @@ blogsRouter.put('/:id', async (request, response) => {
 
 });
 
+blogsRouter.post('/:id/comments', async (request, response) => {
+    const blogId = request.params.id
+    const body = request.body
+    const user = request.user
+
+    const blog = await Blog.findById(blogId)
+    if (!blog) return response.status(404).json({ error: 'Blog not found' })
+
+    const comment = new Comment({
+        content: body.content,
+        blog: blog._id,
+        // user: user._id
+    })
+
+    const savedComment = await comment.save()
+    blog.comments = blog.comments.concat(savedComment._id)
+    await blog.save()
+
+    response.status(201).json(savedComment)
+})
 
 module.exports = blogsRouter
 

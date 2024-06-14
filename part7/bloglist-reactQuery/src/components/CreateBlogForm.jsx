@@ -2,6 +2,8 @@ import { useState } from "react"
 import blogService from "../services/blogs"
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query"
 
+import "../styles/createBlogForm.css"
+
 export const CreateBlogForm = ({ correctNotification }) => {
   const [createBlogVisible, setCreateBlogVisible] = useState(false)
 
@@ -19,6 +21,8 @@ export const CreateBlogForm = ({ correctNotification }) => {
       queryClient.invalidateQueries({ queryKey: ["blogs"] })
     },
   })
+
+  console.log(hideWhenVisible)
 
   const handleChangeTitle = (event) => {
     setTitle(event.target.value)
@@ -49,40 +53,47 @@ export const CreateBlogForm = ({ correctNotification }) => {
 
   return (
     <div className="blog">
-      <button style={hideWhenVisible} onClick={() => setCreateBlogVisible(true)}>
+      <button className="new-blog-button" style={hideWhenVisible} onClick={() => setCreateBlogVisible(true)}>
         New blog
       </button>
+      {/* <div className="create-blog-form" style={showWhenVisible}> */}
       <div style={showWhenVisible}>
         <h2>Create new</h2>
+        {/* <form> */}
         <form onSubmit={handleSubmit}>
-          Title
+          <label>Title</label>
           <input
             data-testid="title"
-            placeholder="title"
+            placeholder="Enter title"
             type="text"
             value={title}
             name="title"
             onChange={handleChangeTitle}
           />
           <br />
-          Author
+          <label>Author</label>
           <input
             data-testid="author"
-            placeholder="author"
+            placeholder="Enter author"
             type="text"
             value={author}
             name="author"
             onChange={handleChangeAuthor}
           />
           <br />
-          Url
-          <input data-testid="url" placeholder="url" type="text" value={url} name="url" onChange={handleChangeUrl} />
+          <label>Url</label>
+          <input data-testid="url" placeholder="Enter URL" type="text" value={url} name="url" onChange={handleChangeUrl} />
           <br />
-          <button onClick={() => setCreateBlogVisible(false)} type="submit">
-            Create new blog
-          </button>
+          <div>
+            <button className="create-blog-button" onClick={handleSubmit}>
+              {/* <button className="create-blog-button" type="submit"> */}
+              Create new blog
+            </button>
+          </div>
         </form>
-        <button onClick={() => setCreateBlogVisible(false)}>cancel</button>
+        <button className="cancel-button" onClick={() => setCreateBlogVisible(false)}>
+          cancel
+        </button>
       </div>
     </div>
   )

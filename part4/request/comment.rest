@@ -1,0 +1,10 @@
+POST http://localhost:3003/api/blogs/666718ff98b39b4cf1e28c33/comments
+Content-Type: application/json
+# Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwYjYyZjRhMWQ2ZjVkMDVjNDVmMDY5NCIsImlhdCI6MTYyNjc4MjA1MX0.QwY5vW2e2JDNMfhc5M6JHt_BkjlMBx1BTRt3RlYUBQI
+
+{
+  "content": "Test message2"
+}
+
+###
+GET http://localhost:3003/api/comments

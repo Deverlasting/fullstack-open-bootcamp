@@ -1,0 +1,50 @@
+/* users view */
+.users-container {
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    max-width: 800px;
+    margin: 0 auto;
+  }
+  
+  h2 {
+    text-align: center;
+    color: #333;
+    margin-bottom: 20px;
+  }
+  
+  .users-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  .users-table th,
+  .users-table td {
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+  }
+  
+  .users-table th {
+    background-color: #f2f2f2;
+    color: #333;
+    font-weight: bold;
+  }
+  
+  .users-table tr:nth-child(even) {
+    background-color: #f9f9f9;
+  }
+  
+  .users-table tr:hover {
+    background-color: #f1f1f1;
+  }
+  
+  .users-table a {
+    color: #007bff;
+    text-decoration: none;
+  }
+  
+  .users-table a:hover {
+    text-decoration: underline;
+  }

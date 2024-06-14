@@ -1,12 +1,13 @@
 import axios from "axios"
 import { useState, useEffect } from "react"
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom"
+import "../styles/users.css"
 
 const Users = ({ allUsers }) => {
   return (
-    <div>
-      <h3>Users basic info</h3>
-      <table>
+    <div className="users-container">
+      <h2>Users basic info</h2>
+      <table className="users-table">
         <thead>
           <tr>
             <th>Name</th>
@@ -16,7 +17,6 @@ const Users = ({ allUsers }) => {
         <tbody>
           {allUsers.map((user) => (
             <tr key={user.id}>
-              {/* <td>{user.name}</td> */}
               <td>
                 <Link to={`/users/${user.id}`}>{user.name}</Link>
               </td>
@@ -28,4 +28,5 @@ const Users = ({ allUsers }) => {
     </div>
   )
 }
+
 export default Users

@@ -1,4 +1,5 @@
 import { BrowserRouter as Router, Routes, Route, Link, Navigate, useParams, useNavigate } from "react-router-dom"
+import "../styles/userAddedBlogs.css"
 
 export const UserAddedBlogs = ({ allUsers, blogs }) => {
   const personId = useParams().id
@@ -6,18 +7,19 @@ export const UserAddedBlogs = ({ allUsers, blogs }) => {
   const filteredBlogsId = user.blogs //blogs de los que quiero sacar el título
 
   return (
-    <div>
+    <div className="blogs-by-user">
       <h2>Blogs created by {user.name}</h2>
-      <table>
+      <table className="blogs-table">
         <tbody>
           {filteredBlogsId.map((filteredBlogId) => {
             const blog = blogs.find((b) => b.id === filteredBlogId)
             if (blog) {
               return (
                 <tr key={blog.id}>
-                  {/* <td>{blog.title}</td> */}
                   <td>
-                    <Link to={`/blogs/${blog.id}`}>{blog.title}</Link>
+                    <Link to={`/blogs/${blog.id}`} className="blog-link">
+                      {blog.title}
+                    </Link>
                   </td>
                 </tr>
               )

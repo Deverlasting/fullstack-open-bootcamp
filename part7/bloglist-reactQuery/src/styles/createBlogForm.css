@@ -1,0 +1,65 @@
+.blog {
+    background-color: #cbecff;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    margin-bottom: 20px;
+    max-width: 600px;
+    margin: 20px auto;
+  }
+  
+  .new-blog-button {
+    background-color: #28a745;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 6px;
+    cursor: pointer;
+    margin-bottom: 10px;
+    transition: background-color 0.3s ease;
+  }
+  
+  .new-blog-button:hover {
+    background-color: #218838;
+  }
+   
+  .create-blog-form h2 {
+    font-size: 18px;
+    color: #333;
+    margin-bottom: 15px;
+  }
+  
+  .create-blog-form form {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .create-blog-form label {
+    font-weight: bold;
+    color: #555;
+    margin-bottom: 5px;
+  }
+  
+  .create-blog-form input {
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+  }
+  
+  .create-blog-button,
+  .cancel-button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-right: 10px;
+  }
+  
+  .create-blog-button:hover,
+  .cancel-button:hover {
+    background-color: #0056b3;
+  }

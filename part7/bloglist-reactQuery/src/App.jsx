@@ -14,11 +14,14 @@ import LoggedUserContext from "./context/LoggedUserContext"
 import { loginUserAction } from "./reducers/loggedUserReducer"
 
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom"
-import Users from "./components/Users"
-import UserAddedBlogs from "./components/UserAddedBlogs"
+import UsersView from "./views/UsersView"
+import UserAddedBlogs from "./views/UserAddedBlogs"
 
 import axios from "axios"
 import BlogView from "./views/BlogView"
+
+import "./index.css"
+import "./styles/menu.css"
 
 const App = () => {
   // const queryClient = new QueryClient()
@@ -127,7 +130,7 @@ const App = () => {
   useEffect(() => {
     getAllUsers()
   }, [])
-  ////VIEWS END//////////////////////////////////////////////
+  ////VIEWS END//////
   // RENDER
   if (user.token === null) {
     // if (loggedUser === null) {
@@ -141,48 +144,49 @@ const App = () => {
     if (result.data) {
       return (
         <div>
-          <Notification notificationMessage={notificationState.message} typeMessage={notificationState.messageType} />
-          <div>
-            <h2>blogs</h2>
-            <h3>{user.name}</h3>
-
-            {blogs.sort(sortByLikes).map((blog) => (
-              <Blog
-                // user={user}
-                user={user}
-                handleLike={() => handleLikeMutation.mutate(blog)}
-                handleRemove={() => handleRemoveMutation.mutate(blog)}
-                key={blog.id}
-                blog={blog}
-              />
-            ))}
-          </div>
-
-          <CreateBlogForm correctNotification={correctNotification} />
-          <button onClick={handleLogOut}>Log out</button>
-
-          <h2>***View section***</h2>
-          {/* <UsersBasicInfo />
-          <LoginUserInfo /> */}
           <Router>
-            <div>
-              <Link to="/">Clear</Link>
-              <br />
-              <Link to="/users">Basic info from users</Link>
-              <br />
-              <br />
+            <div className="menu">
+              <Link to="/blogs" className="menu-link">
+                Blogs
+              </Link>
+              <Link to="/users" className="menu-link">
+                Users
+              </Link>
+              <span className="user">Logged in as: {user.name}</span>
+              <button className="logout-btn" onClick={handleLogOut}>
+                Log out
+              </button>
             </div>
 
             <Routes>
-              <Route path="/" element={<div />} /> {/* renderiza un div vacío, limpia la sección, no muestra nada */}
               <Route path="/users/:id" element={<UserAddedBlogs allUsers={allUsers} blogs={blogs} />} />
-              <Route path="/users" element={<Users allUsers={allUsers} />} />
+              <Route path="/users" element={<UsersView allUsers={allUsers} />} />
               <Route
                 path="/blogs/:id"
-                element={<BlogView blogs={blogs} handleLike={() => handleLikeMutation.mutate(blog)} />}
+                element={<BlogView blogs={blogs} handleLike={(blog) => handleLikeMutation.mutate(blog)} />}
+              />
+              <Route
+                path="/blogs"
+                element={
+                  <div>
+                    <h2>Blogs</h2>
+                    {blogs.sort(sortByLikes).map((blog) => (
+                      <Blog
+                        // user={user}
+                        user={user}
+                        handleLike={() => handleLikeMutation.mutate(blog)}
+                        handleRemove={() => handleRemoveMutation.mutate(blog)}
+                        key={blog.id}
+                        blog={blog}
+                      />
+                    ))}
+                    <CreateBlogForm correctNotification={correctNotification} />
+                  </div>
+                }
               />
             </Routes>
           </Router>
+          <Notification notificationMessage={notificationState.message} typeMessage={notificationState.messageType} />
         </div>
       )
     } else {

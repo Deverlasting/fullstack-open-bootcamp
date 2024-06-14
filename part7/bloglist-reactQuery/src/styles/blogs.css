@@ -1,0 +1,74 @@
+/* Blog.jsx */
+.blog {
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    margin-bottom: 20px;
+    max-width: 600px;
+    margin: 20px auto;
+  }
+  
+  .blog-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .blog-title {
+    font-size: 18px;
+    color: #333;
+    font-weight: bold;
+  }
+  
+  .view-button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .view-button:hover {
+    background-color: #0056b3;
+  }
+  
+  .blog-details {
+    margin-top: 10px;
+  }
+  
+  .blog-details p {
+    margin: 8px 0;
+    color: #555;
+  }
+  
+  .like-button {
+    background-color: #28a745;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 6px;
+    cursor: pointer;
+    margin-left: 10px;
+    transition: background-color 0.3s ease;
+  }
+  
+  .like-button:hover {
+    background-color: #218838;
+  }
+  
+  .remove-button {
+    background-color: #f25073;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .remove-button:hover {
+    background-color: #d12c49;
+  }
