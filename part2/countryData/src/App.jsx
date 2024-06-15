@@ -14,7 +14,7 @@ function App() {
     <>
       Find countries
       <input onChange={handleFilterCountry}></input>
-      {filteredTextCountry}
+      {/* {filteredTextCountry} */}
       <br />
       {/* <AllCountries /> */}
       <Country filteredTextCountry={filteredTextCountry} handleFilterCountry={handleFilterCountry} />
