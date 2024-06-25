@@ -1,22 +1,8 @@
-interface CourseParts {
-  name: string;
-  exerciseCount: number;
-}
+import Part from "./Part";
+import { CoursePart } from "../type";
 
-export const Content = ({ courseParts }: { courseParts: CourseParts[] }) => {
-  return (
-    <div>
-      <p>
-        {courseParts[0].name} {courseParts[0].exerciseCount}
-      </p>
-      <p>
-        {courseParts[1].name} {courseParts[1].exerciseCount}
-      </p>
-      <p>
-        {courseParts[2].name} {courseParts[2].exerciseCount}
-      </p>
-    </div>
-  );
+export const Content = ({ courseParts }: { courseParts: CoursePart[] }) => {
+  return <Part courseParts={courseParts} />;
 };
 
 export default Content;
