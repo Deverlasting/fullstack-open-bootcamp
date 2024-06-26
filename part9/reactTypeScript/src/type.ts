@@ -22,10 +22,15 @@ export interface CoursePartBackground extends CoursePartWithDescription {
   backgroundMaterial: string;
   kind: "background";
 }
+export interface CoursePartSpecial extends CoursePartWithDescription {
+  // description: string;
+  requirements: string[];
+  kind: "special";
+}
 
 // interface CoursePartDescription extends CoursePartWithDescription {
 //   // description: string;
 //   kind: "description";
 // }
 
-export type CoursePart = CoursePartBasic | CoursePartGroup | CoursePartBackground;
+export type CoursePart = CoursePartBasic | CoursePartGroup | CoursePartBackground | CoursePartSpecial;

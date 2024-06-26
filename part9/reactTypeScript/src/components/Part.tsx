@@ -1,6 +1,6 @@
-import { CoursePartBasic, CoursePartGroup, CoursePartBackground } from "../type";
+import { CoursePartBasic, CoursePartGroup, CoursePartBackground, CoursePartSpecial } from "../type";
 
-type CoursePart = CoursePartBasic | CoursePartGroup | CoursePartBackground;
+type CoursePart = CoursePartBasic | CoursePartGroup | CoursePartBackground | CoursePartSpecial;
 
 const Part = ({ courseParts }: { courseParts: CoursePart[] }) => {
   return (
@@ -11,7 +11,7 @@ const Part = ({ courseParts }: { courseParts: CoursePart[] }) => {
             return (
               <div key={index}>
                 <h3>{part.name}</h3>
-                <p>Exercise Count: {part.exerciseCount}</p>
+                {/* <p>Exercise Count: {part.exerciseCount}</p> */}
                 <p>Description: {part.description}</p>
               </div>
             );
@@ -19,7 +19,7 @@ const Part = ({ courseParts }: { courseParts: CoursePart[] }) => {
             return (
               <div key={index}>
                 <h3>{part.name}</h3>
-                <p>Exercise Count: {part.exerciseCount}</p>
+                {/* <p>Exercise Count: {part.exerciseCount}</p> */}
                 <p>Group Project Count: {part.groupProjectCount}</p>
               </div>
             );
@@ -27,13 +27,28 @@ const Part = ({ courseParts }: { courseParts: CoursePart[] }) => {
             return (
               <div key={index}>
                 <h3>{part.name}</h3>
-                <p>Exercise Count: {part.exerciseCount}</p>
+                {/* <p>Exercise Count: {part.exerciseCount}</p> */}
                 <p>Description: {part.description}</p>
                 <p>
                   Background Material: <a href={part.backgroundMaterial}>{part.backgroundMaterial}</a>
                 </p>
               </div>
             );
+          case "special":
+            return (
+              <div key={index}>
+                <h3>{part.name}</h3>
+                {/* <p>Exercise Count: {part.exerciseCount}</p> */}
+                <p>Description: {part.description}</p>
+                <p>
+                  Requirements: Requirements: {part.requirements.join(", ")}
+                  {/* {part.requirements.map((requirement, reqIndex) => (
+                    <div key={reqIndex}>{requirement}</div>
+                  ))} */}
+                </p>
+              </div>
+            );
+
           default:
             return null;
         }
