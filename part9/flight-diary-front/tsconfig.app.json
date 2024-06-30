@@ -24,5 +24,8 @@
     "noFallthroughCasesInSwitch": true
   },
   "include": ["src"],
-  "files": ["types.ts"]
+  "files": [
+    "types.ts"
+    // "../flight-diary-back/src/types.ts"
+  ]
 }
