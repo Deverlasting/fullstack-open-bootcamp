@@ -1,4 +1,4 @@
-import { Gender, NewPatient } from "./types";
+import { Gender, NewPatient, Entry } from "./types";
 
 const isString = (text: unknown): text is string => {
   return typeof text === "string" || text instanceof String;
@@ -34,12 +34,21 @@ const isGender = (param: string): param is Gender => {
     .includes(param);
 };
 
-const parseGender = (gender: unknown): string => {
-  if (!isString(gender) || !isGender(gender)) {
+const parseGender = (gender: unknown): Gender => {
+  if (!isGender || !isString(gender)) {
     throw new Error("Incorrect or missing gender");
   }
-
-  return gender;
+  switch (gender) {
+    case "male":
+      return Gender.Male;
+    case "female":
+      return Gender.Female;
+    case "other":
+      return Gender.Other;
+    default:
+      throw new Error("Incorrect gender");
+  }
+  // return gender;
 };
 const parseOccupation = (occupation: unknown): string => {
   if (!isString(occupation)) {
@@ -49,18 +58,37 @@ const parseOccupation = (occupation: unknown): string => {
   return occupation;
 };
 
+const isArrayofEntries = (entries: unknown): entries is Entry[] => {
+  return Array.isArray(entries);
+};
+
+const parseEntries = (entries: unknown): Entry[] => {
+  if (!isArrayofEntries(entries)) {
+    throw new Error("Incorrect or missing entries");
+  }
+  return entries;
+};
+
 const toNewPatient = (object: unknown): NewPatient => {
   if (!object || typeof object !== "object") {
     throw new Error("Incorrect or missing data");
   }
 
-  if ("name" in object && "dateOfBirth" in object && "ssn" in object && "gender" in object && "occupation" in object) {
+  if (
+    "name" in object &&
+    "dateOfBirth" in object &&
+    "ssn" in object &&
+    "gender" in object &&
+    "occupation" in object &&
+    "entries" in object
+  ) {
     const newPatient: NewPatient = {
       name: parseName(object.name),
       dateOfBirth: parseDateOfBirth(object.dateOfBirth),
       ssn: parseSsn(object.ssn),
       gender: parseGender(object.gender),
       occupation: parseOccupation(object.occupation),
+      entries: parseEntries(object.entries),
     };
 
     return newPatient;

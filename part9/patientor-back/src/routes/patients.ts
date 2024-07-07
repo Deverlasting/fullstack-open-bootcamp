@@ -14,6 +14,23 @@ router.get("/", (_req, res) => {
   res.json(patientData);
 });
 
+// router.get("/api/patients", (_req, res) => {
+//   // eslint-disable-next-line @typescript-eslint/no-unused-vars
+//   const NonssnPatients: NonssnPatient[] = patientData.map(({ ssn, ...rest }) => rest);
+//   res.json(NonssnPatients);
+// });
+
+router.get("/:id", (req, res) => {
+  const id = req.params.id;
+  console.log(`Fetching patient with id ${id}!`);
+
+  const patient = patientData.find((p) => p.id === id);
+
+  res.json(patient);
+
+  // res.json({ ...patient, entries: [] });
+});
+
 router.post("/", (req, res) => {
   try {
     const newPatient = toNewPatient(req.body);
