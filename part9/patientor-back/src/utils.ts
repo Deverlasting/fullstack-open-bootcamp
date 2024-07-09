@@ -1,4 +1,13 @@
-import { Gender, NewPatient, Entry } from "./types";
+// import { Gender, NewPatient, Entry } from "./types";
+import {
+  Entry,
+  Gender,
+  NewPatient,
+  HealthCheckEntry,
+  HospitalEntry,
+  OccupationalHealthcareEntry,
+  HealthCheckRating,
+} from "./types";
 
 const isString = (text: unknown): text is string => {
   return typeof text === "string" || text instanceof String;
@@ -69,7 +78,7 @@ const parseEntries = (entries: unknown): Entry[] => {
   return entries;
 };
 
-const toNewPatient = (object: unknown): NewPatient => {
+export const toNewPatient = (object: unknown): NewPatient => {
   if (!object || typeof object !== "object") {
     throw new Error("Incorrect or missing data");
   }
@@ -97,4 +106,58 @@ const toNewPatient = (object: unknown): NewPatient => {
   throw new Error("Incorrect data: a field missing");
 };
 
-export default toNewPatient;
+//ej9.26
+const parseHealthCheckRating = (rating: any): HealthCheckRating => {
+  if (rating === null || rating === undefined || !Object.values(HealthCheckRating).includes(rating)) {
+    throw new Error(`Incorrect or missing healthCheckRating: ${rating}`);
+  }
+  return rating;
+};
+
+export const toNewEntry = (object: any): Entry => {
+  const baseEntry = {
+    id: Math.random().toString(36).substr(2, 9), // Generar un ID único
+    date: parseDate(object.date),
+    specialist: parseString(object.specialist, "specialist"),
+    description: parseString(object.description, "description"),
+    diagnosisCodes: object.diagnosisCodes,
+  };
+
+  switch (object.type) {
+    case "Hospital":
+      const newHospitalEntry: HospitalEntry = {
+        ...baseEntry,
+        type: "Hospital",
+        discharge: {
+          date: parseDate(object.discharge.date),
+          criteria: parseString(object.discharge.criteria, "discharge.criteria"),
+        },
+      };
+      return newHospitalEntry;
+    case "OccupationalHealthcare":
+      const newOccupationalEntry: OccupationalHealthcareEntry = {
+        ...baseEntry,
+        type: "OccupationalHealthcare",
+        employerName: parseString(object.employerName, "employerName"),
+        sickLeave: object.sickLeave
+          ? {
+              startDate: parseDate(object.sickLeave.startDate),
+              endDate: parseDate(object.sickLeave.endDate),
+            }
+          : undefined,
+      };
+      return newOccupationalEntry;
+    case "HealthCheck":
+      const newHealthCheckEntry: HealthCheckEntry = {
+        ...baseEntry,
+        type: "HealthCheck",
+        healthCheckRating: parseHealthCheckRating(object.healthCheckRating),
+      };
+      return newHealthCheckEntry;
+    default:
+      throw new Error(`Incorrect or missing type: ${object.type}`);
+  }
+};
+
+// export default toNewPatient;
+export default { toNewPatient, parseHealthCheckRating };
