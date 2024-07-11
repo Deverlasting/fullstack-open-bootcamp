@@ -67,4 +67,11 @@ export interface OccupationalHealthcareEntry extends BaseEntry {
   employerName: string;
 }
 
+// export type Entry = HospitalEntry | OccupationalHealthcareEntry | HealthCheckEntry;
+
+// export type NewEntry = Omit<Entry, "id">;
+
 export type Entry = HospitalEntry | OccupationalHealthcareEntry | HealthCheckEntry;
+
+type UnionOmit<T, K extends string | number | symbol> = T extends unknown ? Omit<T, K> : never;
+export type NewEntry = UnionOmit<Entry, "id">;

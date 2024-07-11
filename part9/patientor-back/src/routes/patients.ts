@@ -1,9 +1,9 @@
 // import { NewPatient } from "./../types";
 import express from "express";
 import patientData from "../../data/patients";
-import { addPatient } from "../services/patientService";
+import { addPatient, addEntry } from "../services/patientService";
 // import { NewPatient } from '../types';
-import { toNewPatient } from "../utils";
+import { toNewPatient, toNewEntry } from "../utils";
 
 const router = express.Router();
 
@@ -47,19 +47,22 @@ router.post("/", (req, res) => {
   }
 });
 
-//ej9.26
 router.post("/:id/entries", (req, res) => {
   try {
     const id = req.params.id;
     const newEntry = toNewEntry(req.body);
-    const addedEntry = patientService.addEntry(id, newEntry);
+    const addedEntry = addEntry(id, newEntry);
     if (addedEntry) {
       res.json(addedEntry);
     } else {
       res.status(404).send({ error: "Patient not found" });
     }
-  } catch (error) {
-    res.status(400).send(error.message);
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      res.status(400).send({ error: error.message });
+    } else {
+      res.status(400).send({ error: "An unknown error occurred" });
+    }
   }
 });
 

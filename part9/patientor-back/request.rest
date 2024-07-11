@@ -9,3 +9,18 @@ Content-Type: application/json
   "gender": "male",
   "occupation": "Software Engineer"
 }
+
+###POST request to add a new entry (John McClaine)
+POST http://localhost:3003/api/patients/d2773336-f723-11e9-8f0b-362b9e155667/entries
+Content-Type: application/json
+
+{
+  "date": "2024-07-10",
+  "type": "Hospital",
+  "description": "Paciente ingresado por emergencia",
+  "specialist": "Dr. Smith",
+  "discharge": {
+    "date": "2024-07-15",
+    "criteria": "Criterios cumplidos"
+  }
+}

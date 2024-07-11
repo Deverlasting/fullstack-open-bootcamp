@@ -92,3 +92,12 @@ export interface OccupationalHealthcareEntry extends BaseEntry {
 }
 
 export type Entry = HospitalEntry | OccupationalHealthcareEntry | HealthCheckEntry;
+
+export interface EntryFormValues {
+  date: string;
+  specialist: string;
+  description: string;
+  diagnosisCodes: string;
+  dischargeDate: string;
+  dischargeCriteria: string;
+}
