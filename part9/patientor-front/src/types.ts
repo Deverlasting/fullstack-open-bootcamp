@@ -1,26 +1,3 @@
-// export interface Diagnosis {
-//   code: string;
-//   name: string;
-//   latin?: string;
-// }
-
-// export enum Gender {
-//   Male = "male",
-//   Female = "female",
-//   Other = "other"
-// }
-
-// export interface Patient {
-//   id: string;
-//   name: string;
-//   occupation: string;
-//   gender: Gender;
-//   ssn?: string;
-//   dateOfBirth?: string;
-// }
-
-// export type PatientFormValues = Omit<Patient, "id" | "entries">;
-
 //backend types copy
 export interface Diagnosis {
   code: string;
@@ -41,6 +18,7 @@ export interface Patient {
   entries: Entry[];
 }
 
+export type PatientFormValues = Omit<Patient, "id" | "entries">;
 //Patient type without ssn field
 export type NonssnPatient = Omit<Patient, "ssn" | "entries">;
 
@@ -67,8 +45,6 @@ export interface BaseEntry {
   date: string;
   specialist: string;
   diagnosisCodes?: Array<Diagnosis["code"]>;
-  discharge?: Discharge;
-  sickLeave?: SickLeave;
 }
 
 export enum HealthCheckRating {
@@ -84,11 +60,13 @@ export interface HealthCheckEntry extends BaseEntry {
 
 export interface HospitalEntry extends BaseEntry {
   type: "Hospital";
+  discharge: Discharge;
   //ni idea de lo que hay que poner aquí, creo que va vacío
 }
 export interface OccupationalHealthcareEntry extends BaseEntry {
   type: "OccupationalHealthcare";
   employerName: string;
+  sickLeave: SickLeave;
 }
 
 export type Entry = HospitalEntry | OccupationalHealthcareEntry | HealthCheckEntry;
@@ -100,4 +78,5 @@ export interface EntryFormValues {
   diagnosisCodes: string;
   dischargeDate: string;
   dischargeCriteria: string;
+  type: string;
 }
