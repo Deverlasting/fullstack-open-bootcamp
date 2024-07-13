@@ -5,11 +5,14 @@
 // import { Patient, Diagnosis, Entry, EntryFormValues } from "../types";
 // import AddEntryForm from "./AddEntryForm";
 // import EntryDetail from "./EntryDetail";
+// import { Button, Alert } from "@mui/material";
 
 // const PatientDetailPage = () => {
 //   const { id } = useParams<{ id: string }>();
 //   const [patient, setPatient] = useState<Patient | null>(null);
 //   const [diagnoses, setDiagnoses] = useState<Diagnosis[]>([]);
+//   const [showForm, setShowForm] = useState(false);
+//   const [error, setError] = useState<string | null>(null);
 
 //   useEffect(() => {
 //     const fetchPatient = async () => {
@@ -34,7 +37,7 @@
 //     void fetchDiagnoses();
 //   }, [id]);
 
-//   const handleAddEntry = async (values: EntryFormValues) => {
+//   const handleAddEntry = async (values: EntryFormValues, resetForm: () => void) => {
 //     const entryData = {
 //       date: values.date,
 //       type: "Hospital",
@@ -56,13 +59,23 @@
 //           entries: [...prevPatient.entries, newEntry],
 //         };
 //       });
+//       resetForm();
+//       setShowForm(false);
+//       setError(null);
 //     } catch (e) {
+//       setError("Failed to add entry. Please check your inputs.");
 //       console.error(e);
 //     }
 //   };
 
 //   const handleCancel = () => {
-//     console.log("Cancelled");
+//     setShowForm(false);
+//     setError(null);
+//   };
+
+//   const toggleForm = () => {
+//     setShowForm(!showForm);
+//     setError(null);
 //   };
 
 //   const getDiagnosisName = (code: string): string | undefined => {
@@ -94,8 +107,17 @@
 //         <p>No entries found</p>
 //       )}
 
-//       <h3>Add New Entry</h3>
-//       <AddEntryForm onSubmit={handleAddEntry} onCancel={handleCancel} />
+//       <Button variant="contained" color="primary" onClick={toggleForm}>
+//         {showForm ? "Cancel" : "Add New Entry"}
+//       </Button>
+
+//       {showForm && (
+//         <div>
+//           <h3>Add New Entry</h3>
+//           {error && <Alert severity="error">{error}</Alert>}
+//           <AddEntryForm onSubmit={handleAddEntry} onCancel={handleCancel} />
+//         </div>
+//       )}
 //     </div>
 //   );
 // };
@@ -109,13 +131,14 @@ import { apiBaseUrl } from "../constants";
 import { Patient, Diagnosis, Entry, EntryFormValues } from "../types";
 import AddEntryForm from "./AddEntryForm";
 import EntryDetail from "./EntryDetail";
-import { Button } from "@mui/material";
+import { Button, Alert } from "@mui/material";
 
 const PatientDetailPage = () => {
   const { id } = useParams<{ id: string }>();
   const [patient, setPatient] = useState<Patient | null>(null);
   const [diagnoses, setDiagnoses] = useState<Diagnosis[]>([]);
   const [showForm, setShowForm] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchPatient = async () => {
@@ -141,17 +164,46 @@ const PatientDetailPage = () => {
   }, [id]);
 
   const handleAddEntry = async (values: EntryFormValues, resetForm: () => void) => {
-    const entryData = {
-      date: values.date,
-      type: "Hospital",
-      description: values.description,
-      specialist: values.specialist,
-      discharge: {
-        date: values.dischargeDate,
-        criteria: values.dischargeCriteria,
-      },
-      diagnosisCodes: values.diagnosisCodes.split(",").map((code) => code.trim()),
-    };
+    let entryData;
+
+    switch (values.type) {
+      case "Hospital":
+        entryData = {
+          date: values.date,
+          type: "Hospital",
+          description: values.description,
+          specialist: values.specialist,
+          discharge: {
+            date: values.discharge.date,
+            criteria: values.discharge.criteria,
+          },
+          diagnosisCodes: values.diagnosisCodes.split(",").map((code) => code.trim()),
+        };
+        break;
+      case "OccupationalHealthcare":
+        entryData = {
+          date: values.date,
+          type: "OccupationalHealthcare",
+          description: values.description,
+          specialist: values.specialist,
+          employerName: values.employerName,
+          sickLeaveDate: values.sickLeaveDate,
+          diagnosisCodes: values.diagnosisCodes.split(",").map((code) => code.trim()),
+        };
+        break;
+      case "HealthCheck":
+        entryData = {
+          date: values.date,
+          type: "HealthCheck",
+          description: values.description,
+          specialist: values.specialist,
+          healthCheckRating: values.healthCheckRating,
+          diagnosisCodes: values.diagnosisCodes.split(",").map((code) => code.trim()),
+        };
+        break;
+      default:
+        throw new Error(`Unknown entry type: ${values.type}`);
+    }
 
     try {
       const { data: newEntry } = await axios.post<Entry>(`${apiBaseUrl}/patients/${id}/entries`, entryData);
@@ -164,17 +216,21 @@ const PatientDetailPage = () => {
       });
       resetForm();
       setShowForm(false);
+      setError(null);
     } catch (e) {
+      setError("Failed to add entry. Please check your inputs.");
       console.error(e);
     }
   };
 
   const handleCancel = () => {
     setShowForm(false);
+    setError(null);
   };
 
   const toggleForm = () => {
     setShowForm(!showForm);
+    setError(null);
   };
 
   const getDiagnosisName = (code: string): string | undefined => {
@@ -213,6 +269,7 @@ const PatientDetailPage = () => {
       {showForm && (
         <div>
           <h3>Add New Entry</h3>
+          {error && <Alert severity="error">{error}</Alert>}
           <AddEntryForm onSubmit={handleAddEntry} onCancel={handleCancel} />
         </div>
       )}

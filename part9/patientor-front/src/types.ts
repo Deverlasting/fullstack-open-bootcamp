@@ -1,3 +1,4 @@
+// import { HealthCheckEntry } from "./../../patientor-back/src/types";
 //backend types copy
 export interface Diagnosis {
   code: string;
@@ -30,10 +31,6 @@ export enum Gender {
   Other = "other",
 }
 
-interface Discharge {
-  date: string;
-  criteria: string;
-}
 interface SickLeave {
   startDate: string;
   endDate: string;
@@ -57,11 +54,13 @@ export interface HealthCheckEntry extends BaseEntry {
   type: "HealthCheck";
   healthCheckRating: HealthCheckRating;
 }
-
+interface Discharge {
+  date: string;
+  criteria: string;
+}
 export interface HospitalEntry extends BaseEntry {
   type: "Hospital";
   discharge: Discharge;
-  //ni idea de lo que hay que poner aquí, creo que va vacío
 }
 export interface OccupationalHealthcareEntry extends BaseEntry {
   type: "OccupationalHealthcare";
@@ -76,7 +75,22 @@ export interface EntryFormValues {
   specialist: string;
   description: string;
   diagnosisCodes: string;
-  dischargeDate: string;
-  dischargeCriteria: string;
+  discharge: Discharge;
+
   type: string;
+  employerName: string;
+  sickLeaveDate: string;
+  healthCheckRating: number;
 }
+// export interface EntryFormValues {
+//   date: string;
+//   specialist: string;
+//   description: string;
+//   diagnosisCodes: string;
+//   dischargeDate: string;
+//   dischargeCriteria: string;
+//   type: string;
+//   employerName: string;
+//   sickLeaveDate: string;
+//   healthCheckRating: number;
+// }

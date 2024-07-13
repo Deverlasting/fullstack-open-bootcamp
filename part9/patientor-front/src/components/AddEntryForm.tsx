@@ -1,223 +1,5 @@
-// // import React from "react";
-// // import { Button, TextField, Grid } from "@mui/material";
-
-// // export interface EntryFormValues {
-// //   date: string;
-// //   specialist: string;
-// //   description: string;
-// //   diagnosisCodes: string;
-// //   dischargeDate: string;
-// //   dischargeCriteria: string;
-// // }
-
-// // interface Props {
-// //   onSubmit: (values: EntryFormValues) => void;
-// //   onCancel: () => void;
-// // }
-
-// // const AddEntryForm: React.FC<Props> = ({ onSubmit, onCancel }) => {
-// //   const [values, setValues] = React.useState<EntryFormValues>({
-// //     date: "",
-// //     specialist: "",
-// //     description: "",
-// //     diagnosisCodes: "",
-// //     dischargeDate: "",
-// //     dischargeCriteria: "",
-// //   });
-
-// //   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-// //     const { name, value } = event.target;
-// //     setValues({
-// //       ...values,
-// //       [name]: value,
-// //     });
-// //   };
-
-// //   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-// //     event.preventDefault();
-// //     onSubmit(values);
-// //   };
-
-// //   return (
-// //     <form onSubmit={handleSubmit}>
-// //       <Grid container spacing={2}>
-// //         <Grid item xs={12}>
-// //           <TextField
-// //             label="Date"
-// //             name="date"
-// //             type="date"
-// //             value={values.date}
-// //             onChange={handleChange}
-// //             fullWidth
-// //             InputLabelProps={{
-// //               shrink: true,
-// //             }}
-// //           />
-// //         </Grid>
-// //         <Grid item xs={12}>
-// //           <TextField label="Specialist" name="specialist" value={values.specialist} onChange={handleChange} fullWidth />
-// //         </Grid>
-// //         <Grid item xs={12}>
-// //           <TextField label="Description" name="description" value={values.description} onChange={handleChange} fullWidth />
-// //         </Grid>
-// //         <Grid item xs={12}>
-// //           <TextField
-// //             label="Diagnosis Codes"
-// //             name="diagnosisCodes"
-// //             value={values.diagnosisCodes}
-// //             onChange={handleChange}
-// //             fullWidth
-// //           />
-// //         </Grid>
-// //         <Grid item xs={12}>
-// //           <TextField
-// //             label="Discharge Date"
-// //             name="dischargeDate"
-// //             type="date"
-// //             value={values.dischargeDate}
-// //             onChange={handleChange}
-// //             fullWidth
-// //             InputLabelProps={{
-// //               shrink: true,
-// //             }}
-// //           />
-// //         </Grid>
-// //         <Grid item xs={12}>
-// //           <TextField
-// //             label="Discharge Criteria"
-// //             name="dischargeCriteria"
-// //             value={values.dischargeCriteria}
-// //             onChange={handleChange}
-// //             fullWidth
-// //           />
-// //         </Grid>
-// //         <Grid item xs={12}>
-// //           <Button type="submit" color="primary" variant="contained">
-// //             Add
-// //           </Button>
-// //           <Button color="secondary" variant="contained" onClick={onCancel}>
-// //             Cancel
-// //           </Button>
-// //         </Grid>
-// //       </Grid>
-// //     </form>
-// //   );
-// // };
-
-// // export default AddEntryForm;
-
-// import React from "react";
-// import { Button, TextField, Grid } from "@mui/material";
-// import { EntryFormValues } from "../types";
-// // export interface EntryFormValues {
-// //   date: string;
-// //   specialist: string;
-// //   description: string;
-// //   diagnosisCodes: string;
-// //   dischargeDate: string;
-// //   dischargeCriteria: string;
-// //   type: string;
-// // }
-
-// interface Props {
-//   onSubmit: (values: EntryFormValues) => void;
-//   onCancel: () => void;
-// }
-
-// const AddEntryForm: React.FC<Props> = ({ onSubmit, onCancel }) => {
-//   const [values, setValues] = React.useState<EntryFormValues>({
-//     date: "",
-//     specialist: "",
-//     description: "",
-//     diagnosisCodes: "",
-//     dischargeDate: "",
-//     dischargeCriteria: "",
-//     type: "Hospital", // Añadido tipo predeterminado
-//   });
-
-//   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-//     const { name, value } = event.target;
-//     setValues({
-//       ...values,
-//       [name]: value,
-//     });
-//   };
-
-//   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-//     event.preventDefault();
-//     onSubmit(values);
-//   };
-
-//   return (
-//     <form onSubmit={handleSubmit}>
-//       <Grid container spacing={2}>
-//         <Grid item xs={12}>
-//           <TextField
-//             label="Date"
-//             name="date"
-//             type="date"
-//             value={values.date}
-//             onChange={handleChange}
-//             fullWidth
-//             InputLabelProps={{
-//               shrink: true,
-//             }}
-//           />
-//         </Grid>
-//         <Grid item xs={12}>
-//           <TextField label="Specialist" name="specialist" value={values.specialist} onChange={handleChange} fullWidth />
-//         </Grid>
-//         <Grid item xs={12}>
-//           <TextField label="Description" name="description" value={values.description} onChange={handleChange} fullWidth />
-//         </Grid>
-//         <Grid item xs={12}>
-//           <TextField
-//             label="Diagnosis Codes"
-//             name="diagnosisCodes"
-//             value={values.diagnosisCodes}
-//             onChange={handleChange}
-//             fullWidth
-//           />
-//         </Grid>
-//         <Grid item xs={12}>
-//           <TextField
-//             label="Discharge Date"
-//             name="dischargeDate"
-//             type="date"
-//             value={values.dischargeDate}
-//             onChange={handleChange}
-//             fullWidth
-//             InputLabelProps={{
-//               shrink: true,
-//             }}
-//           />
-//         </Grid>
-//         <Grid item xs={12}>
-//           <TextField
-//             label="Discharge Criteria"
-//             name="dischargeCriteria"
-//             value={values.dischargeCriteria}
-//             onChange={handleChange}
-//             fullWidth
-//           />
-//         </Grid>
-//         <Grid item xs={12}>
-//           <Button type="submit" color="primary" variant="contained">
-//             Add
-//           </Button>
-//           <Button color="secondary" variant="contained" onClick={onCancel}>
-//             Cancel
-//           </Button>
-//         </Grid>
-//       </Grid>
-//     </form>
-//   );
-// };
-
-// export default AddEntryForm;
-
-import React from "react";
-import { Button, TextField, Grid } from "@mui/material";
+import React, { useState } from "react";
+import { TextField, Select, MenuItem, Button, Grid, SelectChangeEvent } from "@mui/material";
 import { EntryFormValues } from "../types";
 
 interface Props {
@@ -226,102 +8,193 @@ interface Props {
 }
 
 const AddEntryForm: React.FC<Props> = ({ onSubmit, onCancel }) => {
-  const [values, setValues] = React.useState<EntryFormValues>({
+  const [values, setValues] = useState<EntryFormValues>({
     date: "",
-    specialist: "",
-    description: "",
-    diagnosisCodes: "",
-    dischargeDate: "",
-    dischargeCriteria: "",
     type: "Hospital",
+    description: "",
+    specialist: "",
+    diagnosisCodes: "",
+    discharge: {
+      date: "",
+      criteria: "",
+    },
+    employerName: "",
+    sickLeaveDate: "",
+    healthCheckRating: 0,
   });
 
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = event.target;
+  const handleInputChange = (field: string) => (event: React.ChangeEvent<HTMLInputElement>) => {
     setValues({
       ...values,
-      [name]: value,
+      [field]: event.target.value,
     });
   };
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    onSubmit(values, () => {
+  const handleHealthCheckRatingChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setValues({
+      ...values,
+      healthCheckRating: Number(event.target.value),
+    });
+  };
+
+  const handleDischargeDateChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setValues({
+      ...values,
+      discharge: {
+        ...values.discharge,
+        date: event.target.value,
+      },
+    });
+  };
+
+  const handleDischargeCriteriaChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setValues({
+      ...values,
+      discharge: {
+        ...values.discharge,
+        criteria: event.target.value,
+      },
+    });
+  };
+
+  // const handleInputChange =
+  //   (field: string, nestedField?: string) => (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  //     if (nestedField) {
+  //       setValues({
+  //         ...values,
+  //         [field]: {
+  //           ...values[field as keyof EntryFormValues],
+  //           [nestedField]: event.target.value,
+  //         },
+  //       });
+  //     } else {
+  //       setValues({
+  //         ...values,
+  //         [field]: event.target.value,
+  //       });
+  //     }
+  //   };
+
+  const handleSelectChange = (event: SelectChangeEvent<string>) => {
+    setValues({
+      ...values,
+      type: event.target.value as string,
+    });
+  };
+
+  const handleSubmit = () => {
+    onSubmit(values, () =>
       setValues({
         date: "",
-        specialist: "",
-        description: "",
-        diagnosisCodes: "",
-        dischargeDate: "",
-        dischargeCriteria: "",
         type: "Hospital",
-      });
-    });
+        description: "",
+        specialist: "",
+        diagnosisCodes: "",
+        discharge: {
+          date: "",
+          criteria: "",
+        },
+        employerName: "",
+        sickLeaveDate: "",
+        healthCheckRating: 0,
+      })
+    );
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <Grid container spacing={2}>
-        <Grid item xs={3}>
-          <TextField
-            label="Date"
-            name="date"
-            type="date"
-            value={values.date}
-            onChange={handleChange}
-            fullWidth
-            InputLabelProps={{
-              shrink: true,
-            }}
-          />
-        </Grid>
-        <Grid item xs={3}>
-          <TextField label="Specialist" name="specialist" value={values.specialist} onChange={handleChange} fullWidth />
-        </Grid>
-        <Grid item xs={3}>
-          <TextField label="Description" name="description" value={values.description} onChange={handleChange} fullWidth />
-        </Grid>
-        <Grid item xs={3}>
-          <TextField
-            label="Diagnosis Codes"
-            name="diagnosisCodes"
-            value={values.diagnosisCodes}
-            onChange={handleChange}
-            fullWidth
-          />
-        </Grid>
-        <Grid item xs={3}>
-          <TextField
-            label="Discharge Date"
-            name="dischargeDate"
-            type="date"
-            value={values.dischargeDate}
-            onChange={handleChange}
-            fullWidth
-            InputLabelProps={{
-              shrink: true,
-            }}
-          />
-        </Grid>
-        <Grid item xs={3}>
-          <TextField
-            label="Discharge Criteria"
-            name="dischargeCriteria"
-            value={values.dischargeCriteria}
-            onChange={handleChange}
-            fullWidth
-          />
-        </Grid>
-        <Grid item xs={3}>
-          <Button type="submit" color="primary" variant="contained">
-            Add
-          </Button>
-          <Button color="secondary" variant="contained" onClick={onCancel}>
-            Cancel
-          </Button>
-        </Grid>
+    <Grid item xs={3} container spacing={2}>
+      <Grid item xs={12}>
+        <Select fullWidth value={values.type} onChange={handleSelectChange}>
+          <MenuItem value="Hospital">Hospital</MenuItem>
+          <MenuItem value="OccupationalHealthcare">Occupational Healthcare</MenuItem>
+          <MenuItem value="HealthCheck">Health Check</MenuItem>
+        </Select>
       </Grid>
-    </form>
+      <Grid item xs={12}>
+        <TextField label="Date" fullWidth value={values.date} onChange={handleInputChange("date")} />
+      </Grid>
+      <Grid item xs={12}>
+        <TextField label="Description" fullWidth value={values.description} onChange={handleInputChange("description")} />
+      </Grid>
+      <Grid item xs={12}>
+        <TextField label="Specialist" fullWidth value={values.specialist} onChange={handleInputChange("specialist")} />
+      </Grid>
+      <Grid item xs={12}>
+        <TextField
+          label="Diagnosis Codes"
+          fullWidth
+          value={values.diagnosisCodes}
+          onChange={handleInputChange("diagnosisCodes")}
+        />
+      </Grid>
+
+      {values.type === "Hospital" && (
+        <>
+          <Grid item xs={12}>
+            <TextField
+              label="Discharge Date"
+              fullWidth
+              value={values.discharge.date}
+              // onChange={handleInputChange("dischargeDate")}
+              // onChange={handleInputChange("discharge.date")}
+              onChange={handleDischargeDateChange}
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <TextField
+              label="Discharge Criteria"
+              fullWidth
+              value={values.discharge.criteria}
+              onChange={handleDischargeCriteriaChange}
+            />
+          </Grid>
+        </>
+      )}
+
+      {values.type === "OccupationalHealthcare" && (
+        <>
+          <Grid item xs={12}>
+            <TextField
+              label="Employer Name"
+              fullWidth
+              value={values.employerName}
+              onChange={handleInputChange("employerName")}
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <TextField
+              label="Sick LeaveDate"
+              fullWidth
+              value={values.sickLeaveDate}
+              onChange={handleInputChange("sickLeaveDate")}
+            />
+          </Grid>
+        </>
+      )}
+
+      {values.type === "HealthCheck" && (
+        <Grid item xs={12}>
+          <TextField
+            type="number"
+            inputProps={{ min: 0, max: 2 }}
+            label="Health Check Rating"
+            fullWidth
+            value={values.healthCheckRating}
+            // onChange={handleInputChange("healthCheckRating")}
+            onChange={handleHealthCheckRatingChange}
+          />
+        </Grid>
+      )}
+
+      <Grid item xs={12}>
+        <Button variant="contained" color="primary" onClick={handleSubmit}>
+          Add
+        </Button>
+        <Button variant="contained" color="secondary" onClick={onCancel}>
+          Cancel
+        </Button>
+      </Grid>
+    </Grid>
   );
 };
 
