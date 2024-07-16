@@ -35,3 +35,16 @@ Content-Type: application/json
   "description": "Yearly control visit. Cholesterol levels back to normal.",
   "healthCheckRating": 0
 }
+
+###POST request to add a new entry Occupational HealtCare (Martin Riggs)
+POST http://localhost:3003/api/patients/d2773598-f723-11e9-8f0b-362b9e155667/entries
+Content-Type: application/json
+
+{
+  "date": "2019-10-20",
+  "specialist": "MD House",
+  "type": "OccupationalHealthcare",
+  "description": "Yearly control visit. Cholesterol levels back to normal.",
+  "employerName": "test",
+  "sickLeaveDate": "2024-10-20"
+}

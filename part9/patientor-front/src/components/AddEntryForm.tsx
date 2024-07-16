@@ -1,190 +1,116 @@
 import React, { useState } from "react";
 import { TextField, Select, MenuItem, Button, Grid, SelectChangeEvent } from "@mui/material";
-import { EntryFormValues } from "../types";
+import { EntryFormValues, HealthCheckEntryFormValues, HospitalFormValues, OccupationalHealthcareFormValues } from "../types";
+import diagnoses from "../../../patientor-back/data/diagnoses";
+import HospitalForm, { HospitalFormDefaultValues } from "./forms/HospitalForm";
+import { OccupationalHealthcareFormDefaultValues } from "./forms/OccupationalHealthcareForm";
+import { HealthCheckFormDefaultValues } from "./forms/HealthCheckForm";
+import OccupationalHealthcareForm from "./forms/OccupationalHealthcareForm";
+import HealthCheckForm from "./forms/HealthCheckForm";
+
+const SpecificFormDefaulValues = {
+  Hospital: HospitalFormDefaultValues,
+  OccupationalHealthcare: OccupationalHealthcareFormDefaultValues,
+  HealthCheck: HealthCheckFormDefaultValues,
+};
 
 interface Props {
-  onSubmit: (values: EntryFormValues, resetForm: () => void) => void;
+  onSubmit: (
+    values: EntryFormValues & (HospitalFormValues | OccupationalHealthcareFormValues | HealthCheckEntryFormValues)
+  ) => void;
   onCancel: () => void;
 }
 
 const AddEntryForm: React.FC<Props> = ({ onSubmit, onCancel }) => {
-  const [values, setValues] = useState<EntryFormValues>({
+  const [commonValues, setCommonValues] = useState<EntryFormValues>({
     date: "",
     type: "Hospital",
     description: "",
     specialist: "",
-    diagnosisCodes: "",
-    discharge: {
-      date: "",
-      criteria: "",
-    },
-    employerName: "",
-    sickLeaveDate: "",
-    healthCheckRating: 0,
+    diagnosisCodes: [],
   });
 
+  const [specificValues, setSpecificValues] = useState<
+    HospitalFormValues | OccupationalHealthcareFormValues | HealthCheckEntryFormValues
+  >(HospitalFormDefaultValues);
+
   const handleInputChange = (field: string) => (event: React.ChangeEvent<HTMLInputElement>) => {
-    setValues({
-      ...values,
+    setCommonValues({
+      ...commonValues,
       [field]: event.target.value,
     });
   };
 
-  const handleHealthCheckRatingChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setValues({
-      ...values,
-      healthCheckRating: Number(event.target.value),
+  const handleDiagnosisCodesChange = (event: SelectChangeEvent<EntryFormValues["diagnosisCodes"]>) => {
+    console.log(event.target.value);
+    const {
+      target: { value },
+    } = event;
+    setCommonValues({
+      ...commonValues,
+      diagnosisCodes: [...commonValues.diagnosisCodes, ...value],
     });
   };
-
-  const handleDischargeDateChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setValues({
-      ...values,
-      discharge: {
-        ...values.discharge,
-        date: event.target.value,
-      },
-    });
-  };
-
-  const handleDischargeCriteriaChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setValues({
-      ...values,
-      discharge: {
-        ...values.discharge,
-        criteria: event.target.value,
-      },
-    });
-  };
-
-  // const handleInputChange =
-  //   (field: string, nestedField?: string) => (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-  //     if (nestedField) {
-  //       setValues({
-  //         ...values,
-  //         [field]: {
-  //           ...values[field as keyof EntryFormValues],
-  //           [nestedField]: event.target.value,
-  //         },
-  //       });
-  //     } else {
-  //       setValues({
-  //         ...values,
-  //         [field]: event.target.value,
-  //       });
-  //     }
-  //   };
 
   const handleSelectChange = (event: SelectChangeEvent<string>) => {
-    setValues({
-      ...values,
-      type: event.target.value as string,
+    setCommonValues({
+      ...commonValues,
+      type: event.target.value as "Hospital" | "OccupationalHealthcare" | "HealthCheck",
     });
+    setSpecificValues(SpecificFormDefaulValues[event.target.value as "Hospital" | "OccupationalHealthcare" | "HealthCheck"]);
   };
 
   const handleSubmit = () => {
-    onSubmit(values, () =>
-      setValues({
-        date: "",
-        type: "Hospital",
-        description: "",
-        specialist: "",
-        diagnosisCodes: "",
-        discharge: {
-          date: "",
-          criteria: "",
-        },
-        employerName: "",
-        sickLeaveDate: "",
-        healthCheckRating: 0,
-      })
-    );
+    onSubmit({ ...commonValues, ...specificValues });
+  };
+
+  const FormType = {
+    Hospital: <HospitalForm onChange={setSpecificValues} />,
+    OccupationalHealthcare: <OccupationalHealthcareForm onChange={setSpecificValues} />,
+    HealthCheck: <HealthCheckForm onChange={setSpecificValues} />,
   };
 
   return (
     <Grid item xs={3} container spacing={2}>
       <Grid item xs={12}>
-        <Select fullWidth value={values.type} onChange={handleSelectChange}>
+        <Select fullWidth value={commonValues.type} onChange={handleSelectChange}>
           <MenuItem value="Hospital">Hospital</MenuItem>
           <MenuItem value="OccupationalHealthcare">Occupational Healthcare</MenuItem>
           <MenuItem value="HealthCheck">Health Check</MenuItem>
         </Select>
       </Grid>
       <Grid item xs={12}>
-        <TextField label="Date" fullWidth value={values.date} onChange={handleInputChange("date")} />
-      </Grid>
-      <Grid item xs={12}>
-        <TextField label="Description" fullWidth value={values.description} onChange={handleInputChange("description")} />
-      </Grid>
-      <Grid item xs={12}>
-        <TextField label="Specialist" fullWidth value={values.specialist} onChange={handleInputChange("specialist")} />
+        <TextField type="date" fullWidth value={commonValues.date} onChange={handleInputChange("date")} />
       </Grid>
       <Grid item xs={12}>
         <TextField
-          label="Diagnosis Codes"
+          label="Description"
           fullWidth
-          value={values.diagnosisCodes}
-          onChange={handleInputChange("diagnosisCodes")}
+          value={commonValues.description}
+          onChange={handleInputChange("description")}
         />
       </Grid>
+      <Grid item xs={12}>
+        <TextField label="Specialist" fullWidth value={commonValues.specialist} onChange={handleInputChange("specialist")} />
+      </Grid>
+      <Grid item xs={12}>
+        <Select
+          // input={<OutlinedInput label="Name" />}
+          fullWidth
+          multiple
+          value={commonValues.diagnosisCodes}
+          onChange={handleDiagnosisCodesChange}
+          // renderValue={(selected) => selected.join(", ")}
+        >
+          {diagnoses.map((diagnosis) => (
+            <MenuItem key={diagnosis.code} value={diagnosis.code}>
+              {diagnosis.code} - {diagnosis.name}
+            </MenuItem>
+          ))}
+        </Select>
+      </Grid>
 
-      {values.type === "Hospital" && (
-        <>
-          <Grid item xs={12}>
-            <TextField
-              label="Discharge Date"
-              fullWidth
-              value={values.discharge.date}
-              // onChange={handleInputChange("dischargeDate")}
-              // onChange={handleInputChange("discharge.date")}
-              onChange={handleDischargeDateChange}
-            />
-          </Grid>
-          <Grid item xs={12}>
-            <TextField
-              label="Discharge Criteria"
-              fullWidth
-              value={values.discharge.criteria}
-              onChange={handleDischargeCriteriaChange}
-            />
-          </Grid>
-        </>
-      )}
-
-      {values.type === "OccupationalHealthcare" && (
-        <>
-          <Grid item xs={12}>
-            <TextField
-              label="Employer Name"
-              fullWidth
-              value={values.employerName}
-              onChange={handleInputChange("employerName")}
-            />
-          </Grid>
-          <Grid item xs={12}>
-            <TextField
-              label="Sick LeaveDate"
-              fullWidth
-              value={values.sickLeaveDate}
-              onChange={handleInputChange("sickLeaveDate")}
-            />
-          </Grid>
-        </>
-      )}
-
-      {values.type === "HealthCheck" && (
-        <Grid item xs={12}>
-          <TextField
-            type="number"
-            inputProps={{ min: 0, max: 2 }}
-            label="Health Check Rating"
-            fullWidth
-            value={values.healthCheckRating}
-            // onChange={handleInputChange("healthCheckRating")}
-            onChange={handleHealthCheckRatingChange}
-          />
-        </Grid>
-      )}
+      {FormType[commonValues.type]}
 
       <Grid item xs={12}>
         <Button variant="contained" color="primary" onClick={handleSubmit}>

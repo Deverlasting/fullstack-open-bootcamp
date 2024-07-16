@@ -1,3 +1,4 @@
+// import { HospitalEntry } from "./types";
 // import { HealthCheckEntry } from "./../../patientor-back/src/types";
 //backend types copy
 export interface Diagnosis {
@@ -70,27 +71,11 @@ export interface OccupationalHealthcareEntry extends BaseEntry {
 
 export type Entry = HospitalEntry | OccupationalHealthcareEntry | HealthCheckEntry;
 
-export interface EntryFormValues {
-  date: string;
-  specialist: string;
-  description: string;
-  diagnosisCodes: string;
-  discharge: Discharge;
+export type EntryFormValues = Pick<BaseEntry, "date" | "specialist" | "description"> & {
+  type: OccupationalHealthcareEntry["type"] | HospitalEntry["type"] | HealthCheckEntry["type"];
+  diagnosisCodes: Array<Diagnosis["code"]>;
+};
 
-  type: string;
-  employerName: string;
-  sickLeaveDate: string;
-  healthCheckRating: number;
-}
-// export interface EntryFormValues {
-//   date: string;
-//   specialist: string;
-//   description: string;
-//   diagnosisCodes: string;
-//   dischargeDate: string;
-//   dischargeCriteria: string;
-//   type: string;
-//   employerName: string;
-//   sickLeaveDate: string;
-//   healthCheckRating: number;
-// }
+export type HospitalFormValues = Pick<HospitalEntry, "discharge">;
+export type OccupationalHealthcareFormValues = Pick<OccupationalHealthcareEntry, "employerName" | "sickLeave">;
+export type HealthCheckEntryFormValues = Pick<HealthCheckEntry, "healthCheckRating">;
